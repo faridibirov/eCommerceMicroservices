@@ -1,4 +1,8 @@
-﻿namespace eCommerce.Infrastructure.DbContext;
+﻿using System.Data;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
+
+namespace eCommerce.Infrastructure.DbContext;
 
 internal class DapperDbContext
 {

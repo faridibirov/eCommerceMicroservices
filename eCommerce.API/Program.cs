@@ -1,6 +1,9 @@
 using eCommerce.Infrastructure;
 using eCommerce.Core;
 using eCommerce.API.Middleware;
+using System.Text.Json.Serialization;
+using eCommerce.Core.Mappers;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

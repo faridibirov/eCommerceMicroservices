@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using eCommerce.Core.DTO;
+using eCommerce.Core.ServiceContracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.API.Controllers;

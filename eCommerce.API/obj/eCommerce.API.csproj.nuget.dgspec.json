@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.API\\eCommerce.API.csproj": {}
+    "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.API\\eCommerce.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.API\\eCommerce.API.csproj": {
+    "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.API\\eCommerce.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.API\\eCommerce.API.csproj",
+        "projectUniqueName": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.API\\eCommerce.API.csproj",
         "projectName": "eCommerce.API",
-        "projectPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.API\\eCommerce.API.csproj",
-        "packagesPath": "C:\\Users\\F.Dibirov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.API\\obj\\",
+        "projectPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.API\\eCommerce.API.csproj",
+        "packagesPath": "C:\\Users\\Farid\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\F.Dibirov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Farid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,18 +26,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Core\\eCommerce.Core.csproj": {
-                "projectPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Core\\eCommerce.Core.csproj"
+              "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Core\\eCommerce.Core.csproj": {
+                "projectPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Core\\eCommerce.Core.csproj"
               },
-              "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj"
+              "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj": {
+                "projectPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj"
               }
             }
           }
@@ -50,11 +50,22 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.21.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -66,24 +77,33 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.413\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Core\\eCommerce.Core.csproj": {
+    "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Core\\eCommerce.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Core\\eCommerce.Core.csproj",
+        "projectUniqueName": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Core\\eCommerce.Core.csproj",
         "projectName": "eCommerce.Core",
-        "projectPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Core\\eCommerce.Core.csproj",
-        "packagesPath": "C:\\Users\\F.Dibirov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Core\\obj\\",
+        "projectPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Core\\eCommerce.Core.csproj",
+        "packagesPath": "C:\\Users\\Farid\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\F.Dibirov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Farid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -91,7 +111,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -109,11 +128,26 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -125,24 +159,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.413\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj": {
+    "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj",
+        "projectUniqueName": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj",
         "projectName": "eCommerce.Infrastructure",
-        "projectPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\F.Dibirov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Infrastructure\\obj\\",
+        "projectPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Infrastructure\\eCommerce.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Farid\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\F.Dibirov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Farid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -150,15 +190,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Core\\eCommerce.Core.csproj": {
-                "projectPath": "C:\\Users\\F.Dibirov\\Downloads\\eCommerceSolution.UsersService-main\\eCommerce.Core\\eCommerce.Core.csproj"
+              "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Core\\eCommerce.Core.csproj": {
+                "projectPath": "D:\\Git\\eCommerceSolution.UsersService\\eCommerce.Core\\eCommerce.Core.csproj"
               }
             }
           }
@@ -172,11 +211,30 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.35, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -188,7 +246,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.413\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

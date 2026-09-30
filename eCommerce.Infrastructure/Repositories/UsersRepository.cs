@@ -1,4 +1,7 @@
-﻿using eCommerce.Infrastructure.DbContext;
+﻿using Dapper;
+using eCommerce.Core.Entities;
+using eCommerce.Core.RepositoryContracts;
+using eCommerce.Infrastructure.DbContext;
 
 namespace eCommerce.Infrastructure.Repositories;
 
@@ -18,7 +21,7 @@ internal class UsersRepository : IUsersRepository
 
         user.UserId = Guid.NewGuid();
 
-        string query = "INSERT INTO public.\"Users\"(\"UserId\", \"Email\", \"PersonName\", \"Gender\" \"Password\")" +
+        string query = "INSERT INTO public.\"Users\"(\"UserId\", \"Email\", \"PersonName\", \"Gender\", \"Password\")" +
             "VALUES(@UserId, @Email, @PersonName, @Gender, @Password)";
 
         int rowCountAffected = await _dbContext.DbConnection.ExecuteAsync(query, user);
@@ -34,7 +37,7 @@ internal class UsersRepository : IUsersRepository
     public async Task<ApplicationUser?> GetUserByEmailAndPassword(string? email, string? password)
     {
 
-        string query = "SELECT * FROM  public.\"Users\" WHERE \"Email\"=@Email AND \"Password\"=@Password)";
+        string query = "SELECT * FROM  public.\"Users\" WHERE \"Email\"=@Email AND \"Password\"=@Password";
 
         var parameters = new {Email =email, Password = password};
 
