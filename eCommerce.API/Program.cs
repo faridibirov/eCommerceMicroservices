@@ -9,7 +9,15 @@ builder.Services.AddInfrastructure();
 builder.Services.AddCore();
 
 //Add controllers to the service collection
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options=>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+builder.Services.AddAutoMapper(typeof(ApplicationUserMappingProfile).Assembly);
+
+//FluentValidations
+builder.Services.AddFluentValidationAutoValidation();
 
 var app = builder.Build();
 app.UseExceptionHandlingMiddleware();

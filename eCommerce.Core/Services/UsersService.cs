@@ -8,10 +8,12 @@ namespace eCommerce.Core.Services;
 internal class UsersService : IUsersService
 {
     private readonly IUsersRepository _usersRepository;
-
-    public UsersService(IUsersRepository usersRepository)
+    private readonly IMapper _mapper;
+    public UsersService(IUsersRepository usersRepository, IMapper mapper)
     {
         _usersRepository = usersRepository;
+        _mapper = mapper;
+
     }
 
     public async Task<AuthenticationResponse?> Login(LoginRequest loginRequest)
@@ -23,7 +25,8 @@ internal class UsersService : IUsersService
             return null;
         }
 
-        return new AuthenticationResponse(user.UserId, user.Email, user.PersonName, user.Gender, "token", Success: true);
+       // return new AuthenticationResponse(user.UserId, user.Email, user.PersonName, user.Gender, "token", Success: true);
+       return _mapper.Map<AuthenticationResponse>(user) with { Success = true, Token = "token"};
     }
     public async Task<AuthenticationResponse?> Register(RegisterRequest registerRequest)
     {
@@ -44,13 +47,18 @@ internal class UsersService : IUsersService
 
         //Return success response
 
-        return new AuthenticationResponse
-            (registeredUser.UserId, 
-            registeredUser.Email, 
-            registeredUser.PersonName, 
-            registeredUser.Gender, 
-            "token",
-            Success: true);
+        //return new AuthenticationResponse
+        //    (registeredUser.UserId, 
+        //    registeredUser.Email, 
+        //    registeredUser.PersonName, 
+        //    registeredUser.Gender, 
+        //    "token",
+        //    Success: true);
+
+        return _mapper.Map<AuthenticationResponse>(registeredUser) with { Success = true, Token = "token" };
+
     }
+
+
 
 }
