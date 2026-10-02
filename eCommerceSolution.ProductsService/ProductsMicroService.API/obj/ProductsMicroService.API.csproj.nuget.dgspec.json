@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\ProductsMicroService.API.csproj": {}
+    "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\ProductsMicroService.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
+    "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+        "projectUniqueName": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
         "projectName": "BusinessLogicLayer",
-        "projectPath": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
-        "packagesPath": "C:\\Users\\F.Dibirov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\obj\\",
+        "projectPath": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+        "packagesPath": "C:\\Users\\Farid\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\F.Dibirov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Farid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,15 +26,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj": {
-                "projectPath": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj"
+              "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj": {
+                "projectPath": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj"
               }
             }
           }
@@ -47,11 +47,26 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -63,24 +78,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.413\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj": {
+    "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj",
+        "projectUniqueName": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj",
         "projectName": "DataAccessLayer",
-        "projectPath": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj",
-        "packagesPath": "C:\\Users\\F.Dibirov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\DataAccessLayer\\obj\\",
+        "projectPath": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\DataAccessLayer\\DataAccessLayer.csproj",
+        "packagesPath": "C:\\Users\\Farid\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\DataAccessLayer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\F.Dibirov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Farid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -88,7 +109,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -106,11 +126,30 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "MySql.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.5, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -122,24 +161,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.413\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\ProductsMicroService.API.csproj": {
+    "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\ProductsMicroService.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\ProductsMicroService.API.csproj",
+        "projectUniqueName": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\ProductsMicroService.API.csproj",
         "projectName": "ProductsMicroService.API",
-        "projectPath": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\ProductsMicroService.API.csproj",
-        "packagesPath": "C:\\Users\\F.Dibirov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\obj\\",
+        "projectPath": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\ProductsMicroService.API.csproj",
+        "packagesPath": "C:\\Users\\Farid\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\ProductsMicroService.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\F.Dibirov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Farid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -147,15 +192,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
-                "projectPath": "C:\\Users\\F.Dibirov\\source\\repos\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
+              "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
+                "projectPath": "D:\\Git\\eCommerceMicroservices\\eCommerceSolution.ProductsService\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
               }
             }
           }
@@ -169,11 +213,34 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.21.0, )"
+            },
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "MySql.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.5, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -185,7 +252,15 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.413\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

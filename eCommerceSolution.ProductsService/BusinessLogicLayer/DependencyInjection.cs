@@ -1,6 +1,8 @@
-﻿namespace eCommerceSolution.ProductsService.BusinessLogicLayer;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-public class DependencyInjection
+namespace eCommerce.ProductsService.BusinessLogicLayer;
+
+public static class DependencyInjection
 {
     public static IServiceCollection AddBusinessLogicLayer(this IServiceCollection services)
     {

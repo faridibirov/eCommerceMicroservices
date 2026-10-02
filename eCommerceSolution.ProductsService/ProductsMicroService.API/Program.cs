@@ -1,10 +1,13 @@
-
+using eCommerce.ProductsService.BusinessLogicLayer;
+using eCommerce.ProductsService.DataAccessLayer;
+using eCommerceSolution.ProductsMicroService.API.Middleware;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Add DAL and BLL services
 builder.Services.AddDataAccessLayer(builder.Configuration);
-builder.Services.AddDataBusinessLogicLayer();
+builder.Services.AddBusinessLogicLayer();
 
 
 builder.Services.AddControllers();

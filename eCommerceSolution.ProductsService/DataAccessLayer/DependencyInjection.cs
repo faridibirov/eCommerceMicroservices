@@ -1,8 +1,11 @@
-﻿using eCommerce.DataAccessLayer.DbContext;
+﻿using eCommerce.DataAccessLayer.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace eCommerceSolution.ProductsService.DataAccessLayer;
+namespace eCommerce.ProductsService.DataAccessLayer;
 
-public class DependencyInjection
+public static class DependencyInjection
 {
     public static IServiceCollection AddDataAccessLayer(this IServiceCollection services, IConfiguration configuration)
     {
