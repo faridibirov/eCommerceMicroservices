@@ -22,10 +22,28 @@ builder.Services.AddAutoMapper(typeof(ApplicationUserMappingProfile).Assembly);
 //FluentValidations
 builder.Services.AddFluentValidationAutoValidation();
 
+//Add API explorer services
+builder.Services.AddEndpointsApiExplorer();
+
+//Add swagger generation services to crate swagger specification
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("hhtp://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 app.UseExceptionHandlingMiddleware();
 //Routing
 app.UseRouting();
+app.UseSwagger(); //Adds endpoint that can serve the swagger.json
+app.SwaggerUI(); // Adds swagger UI 
+app.UseCors();
 
 //Auth
 app.UseAuthentication();
