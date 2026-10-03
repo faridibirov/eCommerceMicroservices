@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.DataAccessLayer.Context;
 
-public class ApplicationDbcontaxt : DbContext
+public class ApplicationDbContext : DbContext
 {
-    public ApplicationDbcontaxt(DbContextOptions<ApplicationDbcontaxt> options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {}
 
     public DbSet<Product> Products { get; set; }
