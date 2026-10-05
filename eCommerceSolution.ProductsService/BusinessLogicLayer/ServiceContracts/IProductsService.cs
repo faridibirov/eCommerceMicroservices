@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
-using DataAccessLayer.Entities;
 using eCommerce.BusinessLogicLayer.DTO;
+using eCommerce.DataAccessLayer.Entities;
 
 namespace eCommerce.BusinessLogicLayer.ServiceContracts;
 

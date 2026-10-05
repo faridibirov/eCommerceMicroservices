@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Entities;
+﻿using eCommerce.DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.DataAccessLayer.Context;

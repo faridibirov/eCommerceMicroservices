@@ -1,23 +1,29 @@
 ﻿
+using System.Linq.Expressions;
+using AutoMapper;
 using eCommerce.BusinessLogicLayer.DTO;
 using eCommerce.BusinessLogicLayer.ServiceContracts;
+using eCommerce.DataAccessLayer.Entities;
+using eCommerce.DataAccessLayer.RepositoryContracts;
+using FluentValidation;
+using FluentValidation.Results;
 
-namespace BusinessLogicLayer.Services;
+namespace eCommerce.BusinessLogicLayer.Services;
 
 public class ProductsService : IProductsService
 {
     private readonly IValidator<ProductAddRequest> _productAddRequestValidator;
     private readonly IValidator<ProductUpdateRequest> _productUpdateRequestValidator;
     private readonly IMapper _mapper;
-    private readonly IProductsRepository _productsRepository;
+    private readonly IProductsRepository _productRepository;
 
     public ProductsService(IValidator<ProductAddRequest> productAddRequestValidator, IValidator<ProductUpdateRequest> productUpdateRequestValidator,
-         IMapper mapper, IProductsRepository productsRepository)
+         IMapper mapper, IProductsRepository productRepository)
     {
         _productAddRequestValidator = productAddRequestValidator;
         _productUpdateRequestValidator = productUpdateRequestValidator;
         _mapper = mapper;
-        _productsRepository = productsRepository;
+        _productRepository = productRepository;
 
     }
 
@@ -59,19 +65,14 @@ public class ProductsService : IProductsService
         }
 
         IEnumerable<ProductResponse?> productResponses = _mapper.Map<IEnumerable<ProductResponse>>(products);
-        return productResponses;
+        return productResponses.ToList();
     }
     public async Task<List<ProductResponse?>> GetProductsByCondition(Expression<Func<Product, bool>> conditionExpression)
     {
         IEnumerable<Product?> products = await _productRepository.GetProductsByCondition(conditionExpression);
 
-        if (!products.Any())
-        {
-            return null;
-        }
-
         IEnumerable<ProductResponse?> productResponse = _mapper.Map<IEnumerable<ProductResponse>>(products);
-        return productResponse;
+        return productResponse.ToList();
     }
     public async Task<ProductResponse?> GetProductByCondition(Expression<Func<Product, bool>> conditionExpression)
     {
@@ -87,7 +88,7 @@ public class ProductsService : IProductsService
     }
 
 
-    public Task<ProductResponse?> UpdateProduct(ProductUpdateRequest productUpdateRequest)
+    public async Task<ProductResponse?> UpdateProduct(ProductUpdateRequest productUpdateRequest)
     {
         if (productUpdateRequest == null)
         {
