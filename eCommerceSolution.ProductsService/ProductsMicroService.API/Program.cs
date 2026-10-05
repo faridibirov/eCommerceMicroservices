@@ -2,6 +2,7 @@ using eCommerce.ProductsService.BusinessLogicLayer;
 using eCommerce.ProductsService.DataAccessLayer;
 using eCommerceSolution.ProductsMicroService.API.Middleware;
 using FluentValidation.AspNetCore;
+using eCommerce.ProductsMicroService.API.APIEndpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,5 +30,6 @@ app.UseAuthorization();
 
 //Controller routes
 app.MapControllers();
+app.MapProductAPIEndpoints();
 app.Run();
 

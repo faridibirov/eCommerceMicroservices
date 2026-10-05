@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataAccessLayer.Entities;
+namespace eCommerce.DataAccessLayer.Entities;
 
 public class Product
 {
