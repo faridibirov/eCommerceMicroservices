@@ -24,7 +24,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 //Add Swagger services
-builder.Services.AddEndpoinsApiExplorer();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Cors
