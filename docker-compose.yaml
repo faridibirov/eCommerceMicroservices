@@ -6,7 +6,7 @@ services:
   ports:
    - "3306:3306"
   volumes:
-   - ./mysql-init:docker-entrypoint-inidb.d
+   - ./mysql-init:/docker-entrypoint-inidb.d
   networks:
    - products-microservice-network
   hostname: mysql-host-productsmicroservice
