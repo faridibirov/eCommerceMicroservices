@@ -1,49 +1,49 @@
 services:
- mysql-container:
-  image: mysql
-  environment:
-   MYSQL_ROOT_PASSWORD: admin
-  ports:
-   - "3306:3306"
-  volumes:
-   - ./mysql-init:/docker-entrypoint-inidb.d
-  networks:
-   - ecommerce-network
-  hostname: mysql-host-productsmicroservice
+  mysql-container:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - ecommerce-network
+    hostname: mysql-host-productsmicroservice
 
- products-microservice:
-  image: faridibirov/ecommerce-products-microservice:v1.0
-  environment:
-   MYSQL_HOST: mysql-host-productsmicroservice
-   MYSQL_PASSWORD: admin
-  ports:
-   - "8080:8080"
-  networks:
-   - products-microservice-network
+  products-microservice:
+    image: faridibirov/ecommerce-products-microservice:v1.0
+    environment:
+      MYSQL_HOST: mysql-host-productsmicroservice
+      MYSQL_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    networks:
+      - products-microservice-network
 
- postgres-container:
-  image: postgres
-  environment:
-   - POSTGRES_USER=postgres
-   - POSTGRES_PASSWORD=admin
-   - POSTGRES_DB=eCommerceUsers
-  ports:
-   - "5432:5432"
-  volumes:
-   - ./postgres-init:/docker-entrypoint-initdb.d
-  networks:
-   - ecommerce-network
-   
- users-microservice:
-  image: faridibirov/ecommerce-users-microservice:v1.0
-  environment: 
-   - POSTGRES_HOST=postgres-container
-   - POSTGRES_PASSWORD=admin
-  ports:
-   - "9090:9090"
-  networks:
-   - ecommerce-network
- 
+  postgres-container:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=eCommerceUsers
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - ecommerce-network
+
+  users-microservice:
+    image: faridibirov/ecommerce-users-microservice:v1.0
+    environment:
+      - POSTGRES_HOST=postgres-container
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "9090:9090"
+    networks:
+      - ecommerce-network
+
 networks:
- ecommerce-network:
-  driver: bridge
+  ecommerce-network:
+    driver: bridge
