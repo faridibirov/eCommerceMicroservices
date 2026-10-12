@@ -2,7 +2,6 @@ using eCommerce.OrdersMicroservice.BusinessLogicLayer;
 using eCommerce.OrdersMicroservice.DataAccessLayer;
 using eCommerceSolution.OrdersMicroservice.API.Middleware;
 using FluentValidation.AspNetCore;
-using eCommerce.OrdersMicroservice.API.APIEndpoints;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);

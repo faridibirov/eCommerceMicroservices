@@ -1,9 +1,8 @@
-﻿using eCommerce.DataAccessLayer.Context;
-using eCommerce.DataAccessLayer.Repositories;
-using eCommerce.DataAccessLayer.RepositoryContracts;
-using Microsoft.EntityFrameworkCore;
+﻿using eCommerce.OrdersMicroservice.DataAccessLayer.Repositories;
+using eCommerce.OrdersMicroservice.DataAccessLayer.RepositoryContracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 
 namespace eCommerce.OrdersMicroservice.DataAccessLayer;
 

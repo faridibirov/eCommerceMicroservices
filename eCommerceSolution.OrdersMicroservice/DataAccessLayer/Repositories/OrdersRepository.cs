@@ -1,5 +1,6 @@
 ﻿using eCommerce.OrdersMicroservice.DataAccessLayer.Entities;
 using eCommerce.OrdersMicroservice.DataAccessLayer.RepositoryContracts;
+using MongoDB.Driver;
 
 namespace eCommerce.OrdersMicroservice.DataAccessLayer.Repositories;
 
@@ -23,7 +24,7 @@ public class OrdersRepository : IOrdersRepository
 
     public async Task<bool> DeleteOrder(Guid orderId)
     {
-        FilterDefinition<Order> filter = Builders<Order>.Filter.Eq(temp => temp.OrderID == orderId);
+        FilterDefinition<Order> filter = Builders<Order>.Filter.Eq(temp => temp.OrderID, orderId);
 
        Order? existingOrder =  (await _orders.FindAsync(filter)).FirstOrDefault();
 
@@ -37,17 +38,17 @@ public class OrdersRepository : IOrdersRepository
         return deleteResult.DeletedCount > 0;
     }
 
-    public async Task<Order?> GetOrderByCondition(FilterDefiniton<Order> filter)
+    public async Task<Order?> GetOrderByCondition(FilterDefinition<Order> filter)
     {
         return (await _orders.FindAsync(filter)).FirstOrDefault();
     }
 
     public async Task<IEnumerable<Order>> GetOrders()
     {
-        return await (_orders.FindAsync(Builders<Order>.Filter.Emtpy)).ToList();
+        return (await _orders.FindAsync(Builders<Order>.Filter.Empty)).ToList();
     }
 
-    public async Task<IEnumerable<Order?>> GetOrdersByCondition(FilterDefiniton<Order> filter)
+    public async Task<IEnumerable<Order?>> GetOrdersByCondition(FilterDefinition<Order> filter)
     {
         return (await _orders.FindAsync(filter)).ToList();
 
@@ -55,7 +56,7 @@ public class OrdersRepository : IOrdersRepository
 
     public async Task<Order?> UpdateOrder(Order order)
     {
-        FilterDefinition<Order> filter = Builders<Order>.Filter.Eq(temp => temp.OrderID == order.OrderID);
+        FilterDefinition<Order> filter = Builders<Order>.Filter.Eq(temp => temp.OrderID, order.OrderID);
 
         Order? existingOrder = (await _orders.FindAsync(filter)).FirstOrDefault();
 
@@ -64,7 +65,7 @@ public class OrdersRepository : IOrdersRepository
             return null;
         }
 
-       ReplaceOneResult replaceOneResult = await _orders.ReplaceOneAsync(filter, order.OrderID);
+       ReplaceOneResult replaceOneResult = await _orders.ReplaceOneAsync(filter, order);
 
         return order;
 

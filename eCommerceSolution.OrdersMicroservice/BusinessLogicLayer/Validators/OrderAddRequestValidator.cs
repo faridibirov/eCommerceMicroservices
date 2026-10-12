@@ -1,4 +1,5 @@
 ﻿using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
+using FluentValidation;
 
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.Validators;
 

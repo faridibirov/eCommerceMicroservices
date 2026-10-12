@@ -1,4 +1,6 @@
-﻿namespace eCommerce.OrdersMicroservice.DataAccessLayer.Entities;
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace eCommerce.OrdersMicroservice.DataAccessLayer.Entities;
 
 public class Order
 {
