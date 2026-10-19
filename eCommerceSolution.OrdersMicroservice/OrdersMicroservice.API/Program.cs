@@ -37,6 +37,11 @@ builder.Services.AddCors(opt =>
     });
 });
 
+builder.Services.AddHttpClient<UsersMicroServiceClient>(client=>
+{
+    client.BaseAddress = new Uri($"http://{builder.Configuration["UsersMicroserviceName"]}:{builder.Configuration["UsersMicroservicePort"]}");
+});
+
 var app = builder.Build();
 
 app.UseExceptionHandlingMiddleware();

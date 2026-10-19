@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using eCommerce.Core.DTO;
+﻿using eCommerce.Core.DTO;
 using eCommerce.Core.Entities;
 using eCommerce.Core.RepositoryContracts;
 using eCommerce.Core.ServiceContracts;
@@ -26,8 +25,8 @@ internal class UsersService : IUsersService
             return null;
         }
 
-       // return new AuthenticationResponse(user.UserId, user.Email, user.PersonName, user.Gender, "token", Success: true);
-       return _mapper.Map<AuthenticationResponse>(user) with { Success = true, Token = "token"};
+        // return new AuthenticationResponse(user.UserId, user.Email, user.PersonName, user.Gender, "token", Success: true);
+        return _mapper.Map<AuthenticationResponse>(user) with { Success = true, Token = "token" };
     }
     public async Task<AuthenticationResponse?> Register(RegisterRequest registerRequest)
     {
@@ -60,6 +59,12 @@ internal class UsersService : IUsersService
 
     }
 
+    public async Task<UserDTO> GetUserByUserID(Guid UserID)
+    {
+        ApplicationUser? user = await _usersRepository.GetUserByUserID(UserID);
+
+        return _mapper.Map<UserDTO>(user);
+    }
 
 
 }

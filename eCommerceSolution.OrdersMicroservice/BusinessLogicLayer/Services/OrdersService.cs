@@ -1,11 +1,6 @@
-﻿using AutoMapper;
+﻿using BusinessLogicLayer.HttpClients;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.ServiceContracts;
-using eCommerce.OrdersMicroservice.DataAccessLayer.Entities;
-using eCommerce.OrdersMicroservice.DataAccessLayer.RepositoryContracts;
-using FluentValidation;
-using FluentValidation.Results;
-using MongoDB.Driver;
 
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.Services;
 
@@ -17,9 +12,11 @@ public class OrdersService : IOrdersService
     private readonly IValidator<OrderItemUpdateRequest> _orderItemUpdateRequestValidator;
     private readonly IMapper _mapper;
     private readonly IOrdersRepository _orderRepository;
+    private UsersMicroserviceClient _usersMicroserviceClient;
 
     public OrdersService(IValidator<OrderAddRequest> orderAddRequestValidator, IValidator<OrderUpdateRequest> orderUpdateRequestValidator,
-        IValidator<OrderItemAddRequest> orderItemAddRequestValidator, IValidator<OrderItemUpdateRequest> orderItemUpdateRequestValidator, IMapper mapper, IOrdersRepository orderRepository)
+        IValidator<OrderItemAddRequest> orderItemAddRequestValidator, IValidator<OrderItemUpdateRequest> orderItemUpdateRequestValidator,
+        IMapper mapper, IOrdersRepository orderRepository, UsersMicroserviceClient usersMicroserviceClient)
     {
         _orderAddRequestValidator = orderAddRequestValidator;
         _orderUpdateRequestValidator = orderUpdateRequestValidator;
@@ -27,6 +24,7 @@ public class OrdersService : IOrdersService
         _orderItemUpdateRequestValidator = orderItemUpdateRequestValidator;
         _mapper = mapper;
         _orderRepository = orderRepository;
+        _usersMicroserviceClient = usersMicroserviceClient;
 
     }
 
@@ -53,6 +51,12 @@ public class OrdersService : IOrdersService
                 string errors = string.Join(", ", orderItemAddRequestValidationResult.Errors.Select(temp => temp.ErrorMessage));
                 throw new ArgumentException(errors);
             }
+        }
+
+        UserDTO? user = await _usersMicroserviceClient.GetUserByUserID(orderAddRequest.UserID);
+        if (user == null)
+        {
+            throw new ArgumentException("Invalid User ID");
         }
 
         Order orderInput = _mapper.Map<Order>(orderAddRequest);
@@ -98,6 +102,13 @@ public class OrdersService : IOrdersService
                 string errors = string.Join(", ", orderItemUpdateRequestValidationResult.Errors.Select(temp => temp.ErrorMessage));
                 throw new ArgumentException(errors);
             }
+        }
+
+
+        UserDTO? user = await _usersMicroserviceClient.GetUserByUserID(orderUpdateRequest.UserID);
+        if (user == null)
+        {
+            throw new ArgumentException("Invalid User ID");
         }
 
         Order orderInput = _mapper.Map<Order>(orderUpdateRequest);
@@ -157,7 +168,7 @@ public class OrdersService : IOrdersService
 
     public async Task<bool> DeleteOrder(Guid orderId)
     {
-       FilterDefinition<Order> filter = Builders<Order>.Filter.Eq(temp=>temp.OrderID, orderId);
+        FilterDefinition<Order> filter = Builders<Order>.Filter.Eq(temp => temp.OrderID, orderId);
 
         Order? existingOrder = await _orderRepository.GetOrderByCondition(filter);
 
