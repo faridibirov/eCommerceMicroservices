@@ -1,5 +1,9 @@
 ﻿
 
+using eCommerce.Core.DTO;
+using eCommerce.Core.ServiceContracts;
+using Microsoft.AspNetCore.Mvc;
+
 namespace eCommerce.API.Controllers;
 
 [Route("api/[controller]")]
@@ -21,13 +25,13 @@ public class UsersController : ControllerBase
             return BadRequest("Invalid UserID");
         }
 
-        UserDTO? resposne = await _usersService.GetUserByUserID(userID);
+        UserDTO? response = await _usersService.GetUserByUserID(userID);
 
-        if (resposne == null)
+        if (response == null)
         {
             return NotFound(response);
         }
 
-        return Ok(resposne);
+        return Ok(response);
     }
 }

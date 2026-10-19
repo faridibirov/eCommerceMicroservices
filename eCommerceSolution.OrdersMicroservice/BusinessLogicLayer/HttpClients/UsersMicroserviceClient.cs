@@ -1,4 +1,6 @@
-﻿using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
+﻿using System.Net;
+using System.Net.Http.Json;
+using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
 
 namespace BusinessLogicLayer.HttpClients;
 
@@ -13,7 +15,7 @@ public class UsersMicroserviceClient
 
     public async Task<UserDTO?> GetUserByUserID(Guid userId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"/api/users{userID}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"/api/users/{userId}");
 
         if (!response.IsSuccessStatusCode)
         {

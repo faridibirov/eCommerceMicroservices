@@ -23,7 +23,7 @@
         "POSTGRES_PASSWORD": "admin",
         "POSTGRES_DATABASE": "eCommerceUsers",
         "POSTGRES_USER": "postgres",
-        "POSTGRES_PORT": "5432"
+        "POSTGRES_PORT": "5433"
       },
         "dotnetRunMessages": true,
         "applicationUrl": "https://localhost:7242;http://localhost:5176",

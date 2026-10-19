@@ -49,7 +49,7 @@ internal class UsersRepository : IUsersRepository
 
     public async Task<ApplicationUser?> GetUserByUserID(Guid? userID)
     {
-        var query = "SELECT * FROM  public.\"Users\" WHERE \"UserId\"=@UserID AND \"Password\"=@Password";
+        var query = "SELECT * FROM  public.\"Users\" WHERE \"UserId\"=@UserID";
 
         var parameters = new {UserID =userID};
 
