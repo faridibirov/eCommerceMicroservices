@@ -8,6 +8,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAcce
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdersMicroservice.API", "OrdersMicroservice.API\OrdersMicroservice.API.csproj", "{017237B3-4E19-44F4-9FB5-6979AAD207B9}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{EDB7A507-F5CD-4C67-9057-57B70BD877FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{017237B3-4E19-44F4-9FB5-6979AAD207B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{017237B3-4E19-44F4-9FB5-6979AAD207B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{017237B3-4E19-44F4-9FB5-6979AAD207B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB7A507-F5CD-4C67-9057-57B70BD877FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB7A507-F5CD-4C67-9057-57B70BD877FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB7A507-F5CD-4C67-9057-57B70BD877FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB7A507-F5CD-4C67-9057-57B70BD877FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
