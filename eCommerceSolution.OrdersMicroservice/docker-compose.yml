@@ -43,7 +43,7 @@ services:
     - MYSQL_USER=root
     - MYSQL_PASSWORD=admin
    ports:
-    - "6000:8080"
+    - "6001:8080"
    networks:
     - products-mysql-network
     - ecommerce-network 
@@ -66,7 +66,7 @@ services:
 
 
   users-microservice:
-   image: usesrs-microservice:latest
+   image: users-microservice:latest
    environment:
     - ASPNETCORE_HTTP_PORTS=8080
     - ASPNETCORE_ENVIRONMENT=Development

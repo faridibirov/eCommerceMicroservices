@@ -63,7 +63,7 @@ app.UseSwaggerUI();
 app.UseRouting();
 
 //Auth
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 

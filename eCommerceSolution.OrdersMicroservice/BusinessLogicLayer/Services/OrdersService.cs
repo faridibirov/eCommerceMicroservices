@@ -76,6 +76,12 @@ public class OrdersService : IOrdersService
         }
 
         Order orderInput = _mapper.Map<Order>(orderAddRequest);
+
+        foreach(var orderItem in orderInput.OrderItems)
+        {
+            orderItem.TotalPrice = orderItem.UnitPrice * orderItem.Quantity;
+        }
+
         orderInput.TotalBill = orderInput.OrderItems.Sum(x => x.TotalPrice);
 
         Order? addedOrder = await _orderRepository.AddOrder(orderInput);
@@ -149,6 +155,12 @@ public class OrdersService : IOrdersService
         }
 
         Order orderInput = _mapper.Map<Order>(orderUpdateRequest);
+
+        foreach (var orderItem in orderInput.OrderItems)
+        {
+            orderItem.TotalPrice = orderItem.UnitPrice * orderItem.Quantity;
+        }
+
         orderInput.TotalBill = orderInput.OrderItems.Sum(x => x.TotalPrice);
 
         Order? updatedOrder = await _orderRepository.UpdateOrder(orderInput);
@@ -220,7 +232,7 @@ public class OrdersService : IOrdersService
     {
         IEnumerable<Order?> orders = await _orderRepository.GetOrdersByCondition(filter);
 
-        IEnumerable<OrderResponse?> orderResponse = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+        IEnumerable<OrderResponse?> orderResponses = _mapper.Map<IEnumerable<OrderResponse>>(orders);
 
         foreach (OrderResponse? orderResponse in orderResponses)
         {
@@ -246,7 +258,7 @@ public class OrdersService : IOrdersService
             }
         }
 
-        return orderResponse.ToList();
+        return orderResponses.ToList();
     }
     public async Task<OrderResponse?> GetOrderByCondition(FilterDefinition<Order> filter)
     {
