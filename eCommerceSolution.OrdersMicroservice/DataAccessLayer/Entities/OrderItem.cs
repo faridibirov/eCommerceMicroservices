@@ -11,6 +11,9 @@ public class OrderItem
     [BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public Guid ProductID { get; set; }
 
+    public string ProductName { get; set; }
+    public string Category { get; set; }
+
     [BsonRepresentation(MongoDB.Bson.BsonType.Double)]
     public decimal UnitPrice { get; set; }
 

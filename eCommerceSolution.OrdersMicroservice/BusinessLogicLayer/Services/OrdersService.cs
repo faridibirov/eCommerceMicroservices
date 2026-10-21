@@ -19,10 +19,11 @@ public class OrdersService : IOrdersService
     private readonly IMapper _mapper;
     private readonly IOrdersRepository _orderRepository;
     private UsersMicroserviceClient _usersMicroserviceClient;
+    private ProductsMicroserviceClient _productsMicroserviceClient;
 
     public OrdersService(IValidator<OrderAddRequest> orderAddRequestValidator, IValidator<OrderUpdateRequest> orderUpdateRequestValidator,
         IValidator<OrderItemAddRequest> orderItemAddRequestValidator, IValidator<OrderItemUpdateRequest> orderItemUpdateRequestValidator,
-        IMapper mapper, IOrdersRepository orderRepository, UsersMicroserviceClient usersMicroserviceClient)
+        IMapper mapper, IOrdersRepository orderRepository, UsersMicroserviceClient usersMicroserviceClient, ProductsMicroserviceClient productsMicroserviceClient)
     {
         _orderAddRequestValidator = orderAddRequestValidator;
         _orderUpdateRequestValidator = orderUpdateRequestValidator;
@@ -31,7 +32,7 @@ public class OrdersService : IOrdersService
         _mapper = mapper;
         _orderRepository = orderRepository;
         _usersMicroserviceClient = usersMicroserviceClient;
-
+        _productsMicroserviceClient = productsMicroserviceClient;
     }
 
     public async Task<OrderResponse?> AddOrder(OrderAddRequest orderAddRequest)
@@ -48,6 +49,8 @@ public class OrdersService : IOrdersService
             throw new ArgumentException(errors);
         }
 
+        List<ProductDTO> products = new List<ProductDTO>();
+
         foreach (OrderItemAddRequest orderItemAddRequest in orderAddRequest.OrderItems)
         {
             ValidationResult orderItemAddRequestValidationResult = await _orderItemAddRequestValidator.ValidateAsync(orderItemAddRequest);
@@ -57,6 +60,13 @@ public class OrdersService : IOrdersService
                 string errors = string.Join(", ", orderItemAddRequestValidationResult.Errors.Select(temp => temp.ErrorMessage));
                 throw new ArgumentException(errors);
             }
+            ProductDTO? product = await _productsMicroserviceClient.GetProductByProductID(orderItemAddRequest.ProductID);
+            if (product == null)
+            {
+                throw new ArgumentException("Invalid Product ID");
+            }
+
+            products.Add(product);
         }
 
         UserDTO? user = await _usersMicroserviceClient.GetUserByUserID(orderAddRequest.UserID);
@@ -66,12 +76,6 @@ public class OrdersService : IOrdersService
         }
 
         Order orderInput = _mapper.Map<Order>(orderAddRequest);
-
-        foreach (OrderItem orderItem in orderInput.OrderItems)
-        {
-            orderItem.TotalPrice = orderItem.Quantity * orderItem.UnitPrice;
-        }
-
         orderInput.TotalBill = orderInput.OrderItems.Sum(x => x.TotalPrice);
 
         Order? addedOrder = await _orderRepository.AddOrder(orderInput);
@@ -82,6 +86,25 @@ public class OrdersService : IOrdersService
         }
 
         OrderResponse addedOrderResponse = _mapper.Map<OrderResponse>(addedOrder);
+
+        if (addedOrderResponse != null)
+        {
+            if (user != null)
+            {
+                _mapper.Map<UserDTO, OrderResponse>(user, addedOrderResponse);
+            }
+
+            foreach (OrderItemResponse orderItemResponse in addedOrderResponse.OrderItems)
+            {
+                ProductDTO? product = products.Where(x => x.ProductID == orderItemResponse.ProductID).FirstOrDefault();
+
+                if (product == null)
+                {
+                    continue;
+                }
+                _mapper.Map<ProductDTO, OrderItemResponse>(product, orderItemResponse);
+            }
+        }
 
         return addedOrderResponse;
     }
@@ -99,6 +122,8 @@ public class OrdersService : IOrdersService
             throw new ArgumentException(errors);
         }
 
+        List<ProductDTO> products = new List<ProductDTO>();
+
         foreach (OrderItemUpdateRequest orderItemUpdateRequest in orderUpdateRequest.OrderItems)
         {
             ValidationResult orderItemUpdateRequestValidationResult = await _orderItemUpdateRequestValidator.ValidateAsync(orderItemUpdateRequest);
@@ -108,6 +133,12 @@ public class OrdersService : IOrdersService
                 string errors = string.Join(", ", orderItemUpdateRequestValidationResult.Errors.Select(temp => temp.ErrorMessage));
                 throw new ArgumentException(errors);
             }
+            ProductDTO? product = await _productsMicroserviceClient.GetProductByProductID(orderItemUpdateRequest.ProductID);
+            if (product == null)
+            {
+                throw new ArgumentException("Invalid Product ID");
+            }
+            products.Add(product);
         }
 
 
@@ -118,12 +149,6 @@ public class OrdersService : IOrdersService
         }
 
         Order orderInput = _mapper.Map<Order>(orderUpdateRequest);
-
-        foreach (OrderItem orderItem in orderInput.OrderItems)
-        {
-            orderItem.TotalPrice = orderItem.Quantity * orderItem.UnitPrice;
-        }
-
         orderInput.TotalBill = orderInput.OrderItems.Sum(x => x.TotalPrice);
 
         Order? updatedOrder = await _orderRepository.UpdateOrder(orderInput);
@@ -135,6 +160,25 @@ public class OrdersService : IOrdersService
 
         OrderResponse updatedOrderResponse = _mapper.Map<OrderResponse>(updatedOrder);
 
+        if (updatedOrderResponse != null)
+        {
+            if (user != null)
+            {
+                _mapper.Map<UserDTO, OrderResponse>(user, updatedOrderResponse);
+            }
+
+            foreach (OrderItemResponse orderItemResponse in updatedOrderResponse.OrderItems)
+            {
+                ProductDTO? product = products.Where(x => x.ProductID == orderItemResponse.ProductID).FirstOrDefault();
+
+                if (product == null)
+                {
+                    continue;
+                }
+                _mapper.Map<ProductDTO, OrderItemResponse>(product, orderItemResponse);
+            }
+        }
+
         return updatedOrderResponse;
     }
 
@@ -143,12 +187,33 @@ public class OrdersService : IOrdersService
     {
         IEnumerable<Order?> orders = await _orderRepository.GetOrders();
 
-        if (!orders.Any())
-        {
-            return null;
-        }
-
         IEnumerable<OrderResponse?> orderResponses = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+
+        foreach (OrderResponse? orderResponse in orderResponses)
+        {
+            if (orderResponse == null)
+            {
+                continue;
+            }
+
+            foreach (OrderItemResponse orderItemResponse in orderResponse.OrderItems)
+            {
+                ProductDTO? product = await _productsMicroserviceClient.GetProductByProductID(orderItemResponse.ProductID);
+
+                if (product == null)
+                {
+                    continue;
+                }
+                _mapper.Map<ProductDTO, OrderItemResponse>(product, orderItemResponse);
+            }
+
+            UserDTO? user = await _usersMicroserviceClient.GetUserByUserID(orderResponse.UserID);
+            if (user != null)
+            {
+                _mapper.Map<UserDTO, OrderResponse>(user, orderResponse);
+            }
+
+        }
         return orderResponses.ToList();
     }
     public async Task<List<OrderResponse?>> GetOrdersByCondition(FilterDefinition<Order> filter)
@@ -156,6 +221,31 @@ public class OrdersService : IOrdersService
         IEnumerable<Order?> orders = await _orderRepository.GetOrdersByCondition(filter);
 
         IEnumerable<OrderResponse?> orderResponse = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+
+        foreach (OrderResponse? orderResponse in orderResponses)
+        {
+            if (orderResponse == null)
+            {
+                continue;
+            }
+
+            foreach (OrderItemResponse orderItemResponse in orderResponse.OrderItems)
+            {
+                ProductDTO? product = await _productsMicroserviceClient.GetProductByProductID(orderItemResponse.ProductID);
+
+                if (product == null)
+                {
+                    continue;
+                }
+                _mapper.Map<ProductDTO, OrderItemResponse>(product, orderItemResponse);
+            }
+            UserDTO? user = await _usersMicroserviceClient.GetUserByUserID(orderResponse.UserID);
+            if (user != null)
+            {
+                _mapper.Map<UserDTO, OrderResponse>(user, orderResponse);
+            }
+        }
+
         return orderResponse.ToList();
     }
     public async Task<OrderResponse?> GetOrderByCondition(FilterDefinition<Order> filter)
@@ -168,6 +258,26 @@ public class OrdersService : IOrdersService
         }
 
         OrderResponse orderResponse = _mapper.Map<OrderResponse>(order);
+
+        if (orderResponse != null)
+        {
+            foreach (OrderItemResponse orderItemResponse in orderResponse.OrderItems)
+            {
+                ProductDTO? product = await _productsMicroserviceClient.GetProductByProductID(orderItemResponse.ProductID);
+
+                if (product == null)
+                {
+                    continue;
+                }
+                _mapper.Map<ProductDTO, OrderItemResponse>(product, orderItemResponse);
+            }
+            UserDTO? user = await _usersMicroserviceClient.GetUserByUserID(orderResponse.UserID);
+            if (user != null)
+            {
+                _mapper.Map<UserDTO, OrderResponse>(user, orderResponse);
+            }
+        }
+
         return orderResponse;
     }
 
