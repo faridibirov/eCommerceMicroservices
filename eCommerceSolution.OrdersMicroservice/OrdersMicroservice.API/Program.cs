@@ -1,5 +1,6 @@
 using BusinessLogicLayer.HttpClients;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer;
+using eCommerce.OrdersMicroservice.BusinessLogicLayer.Policies;
 using eCommerce.OrdersMicroservice.DataAccessLayer;
 using eCommerceSolution.OrdersMicroservice.API.Middleware;
 using FluentValidation.AspNetCore;
@@ -38,16 +39,15 @@ builder.Services.AddCors(opt =>
     });
 });
 
-builder.Services.AddTransient<IUsersMicroservicePolicies, IUsersMicroservicePolicies>();
+builder.Services.AddTransient<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
 
 builder.Services.AddHttpClient<UsersMicroserviceClient>(client =>
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["UsersMicroserviceName"]}:{builder.Configuration["UsersMicroservicePort"]}");
 }).AddPolicyHandler(
-   builder.Services.BuildServiceProvider().GetRequiredService<IusersMicroservicePolicies>().GetRetryPolicy()
+   builder.Services.BuildServiceProvider().GetRequiredService<IUsersMicroservicePolicies>().GetRetryPolicy())
    .AddPolicyHandler(
-   builder.Services.BuildServiceProvider().GetRequiredService<IusersMicroservicePolicies>().GetCircuitBreakerPolicy()
-    );
+   builder.Services.BuildServiceProvider().GetRequiredService<IUsersMicroservicePolicies>().GetCircuitBreakerPolicy());
 
 builder.Services.AddHttpClient<ProductsMicroserviceClient>(client =>
 {

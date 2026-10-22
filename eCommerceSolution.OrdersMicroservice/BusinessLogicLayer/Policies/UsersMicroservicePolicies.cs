@@ -1,4 +1,7 @@
-﻿using Polly;
+﻿using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.CircuitBreaker;
+using Polly.Retry;
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.Policies;
 
 public class UsersMicroservicePolicies : IUsersMicroservicePolicies
@@ -13,7 +16,7 @@ public class UsersMicroservicePolicies : IUsersMicroservicePolicies
     public IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
     {
         AsyncRetryPolicy<HttpResponseMessage> policy =
-             Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode).WaitAndRetryAsync(retryCount: 5, sleepDurationProvider: retryAttempt => 
+             Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode).WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: retryAttempt => 
              TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
              onRetry: (outcome, timespan, retryAttempt, context) =>
              {
