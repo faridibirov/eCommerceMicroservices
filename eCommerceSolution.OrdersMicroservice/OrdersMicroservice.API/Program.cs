@@ -38,10 +38,16 @@ builder.Services.AddCors(opt =>
     });
 });
 
-builder.Services.AddHttpClient<UsersMicroserviceClient>(client=>
+builder.Services.AddTransient<IUsersMicroservicePolicies, IUsersMicroservicePolicies>();
+
+builder.Services.AddHttpClient<UsersMicroserviceClient>(client =>
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["UsersMicroserviceName"]}:{builder.Configuration["UsersMicroservicePort"]}");
-});
+}).AddPolicyHandler(
+   builder.Services.BuildServiceProvider().GetRequiredService<IusersMicroservicePolicies>().GetRetryPolicy()
+   .AddPolicyHandler(
+   builder.Services.BuildServiceProvider().GetRequiredService<IusersMicroservicePolicies>().GetCircuitBreakerPolicy()
+    );
 
 builder.Services.AddHttpClient<ProductsMicroserviceClient>(client =>
 {
