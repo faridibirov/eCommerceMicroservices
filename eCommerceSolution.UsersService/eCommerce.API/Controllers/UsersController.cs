@@ -21,7 +21,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetUserByUserID(Guid userID)
     {
         await Task.Delay(10000);
-      //  throw new NotImplementedException();
+        throw new NotImplementedException();
 
         if (userID == Guid.Empty)
         {

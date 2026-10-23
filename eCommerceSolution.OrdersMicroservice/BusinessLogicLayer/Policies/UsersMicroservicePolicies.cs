@@ -3,6 +3,7 @@ using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
 using Polly.Timeout;
+using Polly.Wrap;
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.Policies;
 
 public class UsersMicroservicePolicies : IUsersMicroservicePolicies
@@ -20,9 +21,9 @@ public class UsersMicroservicePolicies : IUsersMicroservicePolicies
     {
         var retryPolicy = _pollyPolicies.GetRetryPolicy(5); 
         var circuitBreakerPolicy = _pollyPolicies.GetCircuitBreakerPolicy(3, TimeSpan.FromMinutes(2));
-        var timeoutPolicy = _pollyPolicies.GetTimeoutPolicy(TimeSpan.FromSeconds(5));
+        var timeoutPolicy = _pollyPolicies.GetTimeoutPolicy(TimeSpan.FromSeconds(3));
 
-        AsyncPolicyWrap<HttpResponseMessage> wrappedPolicy =  Policy().WrapAsync(retryPolicy, circuitBreakerPolicy, timeoutPolicy);
+        AsyncPolicyWrap<HttpResponseMessage> wrappedPolicy = Policy.WrapAsync(retryPolicy, circuitBreakerPolicy, timeoutPolicy);
         return wrappedPolicy;
     }
     

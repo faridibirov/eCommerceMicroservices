@@ -1,4 +1,6 @@
 ﻿using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
+using Microsoft.Extensions.Logging;
+using Polly.Bulkhead;
 using System.Net;
 using System.Net.Http.Json;
 

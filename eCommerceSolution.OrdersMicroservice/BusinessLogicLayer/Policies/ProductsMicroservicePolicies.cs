@@ -1,4 +1,10 @@
-﻿using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
+﻿using System.Net;
+using System.Text;
+using System.Text.Json;
+using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
+using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Bulkhead;
 using Polly.Fallback;
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.Policies;
 
@@ -21,7 +27,7 @@ public class ProductsMicroservicePolicies : IProductsMicroservicePolicies
                 ProductDTO product = new ProductDTO(ProductID: Guid.Empty, ProductName: "Temporarily Unavailable (fallback)",
                    Category: "Temporarily Unavailable (fallback)", UnitPrice: 0, QuantityInStock: 0);
 
-                new HttpResponseMessage(HttpStatusCode.OK)
+                return new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json")
                 };
