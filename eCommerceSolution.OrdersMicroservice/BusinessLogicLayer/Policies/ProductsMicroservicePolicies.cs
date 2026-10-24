@@ -27,7 +27,7 @@ public class ProductsMicroservicePolicies : IProductsMicroservicePolicies
                 ProductDTO product = new ProductDTO(ProductID: Guid.Empty, ProductName: "Temporarily Unavailable (fallback)",
                    Category: "Temporarily Unavailable (fallback)", UnitPrice: 0, QuantityInStock: 0);
 
-                return new HttpResponseMessage(HttpStatusCode.OK)
+                return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
                 {
                     Content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json")
                 };
