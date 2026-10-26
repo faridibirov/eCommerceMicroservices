@@ -5,8 +5,8 @@
       "DownstreamPathTemplate": "/api/Orders",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ordersmicroservice.api",
-          "Port": 8080
+            "Host": "ordersmicroservice.api",
+            "Port": 8080
         }
       ],
       /* http://localhost:5000/gateway/Orders to http://ordersmicroservice.api:8080/api/Orders */
@@ -98,7 +98,7 @@
         "RetryOnServerError": true
       },
       "RateLimitOptions": {
-        "Limit": 3,
+        "Limit": 30,
         "Period": "60s",
         "HttpStatusCode": 429,
         "EnableRateLimiting": true,
@@ -152,7 +152,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "users-microservice",
-          "Port": 8080
+          "Port": 9090
         }
       ],
       "UpstreamHttpMethod": [ "Post", "Options" ],
@@ -164,7 +164,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "users-microservice",
-          "Port": 8080
+          "Port": 9090
         }
       ],
       "UpstreamHttpMethod": [ "Post", "Options" ],
@@ -176,7 +176,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "users-microservice",
-          "Port": 8080
+          "Port": 9090
         }
       ],
       "UpstreamHttpMethod": [ "Get" ],
