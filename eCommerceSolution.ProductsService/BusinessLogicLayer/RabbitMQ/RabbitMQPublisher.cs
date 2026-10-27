@@ -1,4 +1,9 @@
-﻿namespace eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
+﻿using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
+
+namespace eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
 
 public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
 {
@@ -31,8 +36,8 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
         byte[] messageBodyInBytes = Encoding.UTF8.GetBytes(messageJson);
 
         //Create exchange
-        string exchangeName = "products.exchange";
-        _channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Dircet, durable: true);
+        string exchangeName = _configuration["RabbitMQ_Products_Exchange"]!;
+        _channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Direct, durable: true);
 
         //PUblish message
         _channel.BasicPublish(exchange: exchangeName, routingKey: routingKey, basicProperties: null, body: messageBodyInBytes);

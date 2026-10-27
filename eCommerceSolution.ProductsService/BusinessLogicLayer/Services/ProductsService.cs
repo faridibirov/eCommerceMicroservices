@@ -92,7 +92,7 @@ public class ProductsService : IProductsService
 
     public async Task<ProductResponse?> UpdateProduct(ProductUpdateRequest productUpdateRequest)
     {
-        Product? existingProduct = await _productRepository.GetProductByCondition(temp => temp.ProductId == productUpdateRequest.ProductId);
+        Product? existingProduct = await _productRepository.GetProductByCondition(temp => temp.ProductID == productUpdateRequest.ProductID);
 
         if (existingProduct == null)
         {
@@ -119,7 +119,7 @@ public class ProductsService : IProductsService
 
         Product? updatedProduct = await _productRepository.UpdateProduct(productInput);
 
-        if (isProductNameChanged )
+        if (isProductNameChanged)
         {
             string routingKey = "product.update.name";
             var message = new ProductNameUpdateMessage(productInput.ProductID, productInput.ProductName);
