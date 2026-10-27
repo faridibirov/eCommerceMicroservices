@@ -1,6 +1,7 @@
 ﻿using eCommerce.BusinessLogicLayer.Mappers;
 using eCommerce.BusinessLogicLayer.ServiceContracts;
 using eCommerce.BusinessLogicLayer.Validators;
+using eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,7 @@ public static class DependencyInjection
 
         services.AddScoped<IProductsService, eCommerce.BusinessLogicLayer.Services.ProductsService>();
         services.AddValidatorsFromAssemblyContaining<ProductAddRequestValidator>();
+        services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();
 
         return services;
     }

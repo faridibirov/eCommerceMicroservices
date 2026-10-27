@@ -1,12 +1,13 @@
 ﻿
-using System.Linq.Expressions;
 using AutoMapper;
 using eCommerce.BusinessLogicLayer.DTO;
 using eCommerce.BusinessLogicLayer.ServiceContracts;
 using eCommerce.DataAccessLayer.Entities;
 using eCommerce.DataAccessLayer.RepositoryContracts;
+using eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
 using FluentValidation;
 using FluentValidation.Results;
+using System.Linq.Expressions;
 
 namespace eCommerce.BusinessLogicLayer.Services;
 
@@ -16,15 +17,16 @@ public class ProductsService : IProductsService
     private readonly IValidator<ProductUpdateRequest> _productUpdateRequestValidator;
     private readonly IMapper _mapper;
     private readonly IProductsRepository _productRepository;
+    private readonly IRabbitMQPublisher _rabbitMQPublisher;
 
     public ProductsService(IValidator<ProductAddRequest> productAddRequestValidator, IValidator<ProductUpdateRequest> productUpdateRequestValidator,
-         IMapper mapper, IProductsRepository productRepository)
+         IMapper mapper, IProductsRepository productRepository, IRabbitMQPublisher rabbitMQPublisher)
     {
         _productAddRequestValidator = productAddRequestValidator;
         _productUpdateRequestValidator = productUpdateRequestValidator;
         _mapper = mapper;
         _productRepository = productRepository;
-
+        _rabbitMQPublisher = rabbitMQPublisher;
     }
 
     public async Task<ProductResponse?> AddProduct(ProductAddRequest productAddRequest)
@@ -90,6 +92,14 @@ public class ProductsService : IProductsService
 
     public async Task<ProductResponse?> UpdateProduct(ProductUpdateRequest productUpdateRequest)
     {
+        Product? existingProduct = await _productRepository.GetProductByCondition(temp => temp.ProductId == productUpdateRequest.ProductId);
+
+        if (existingProduct == null)
+        {
+            throw new ArgumentException("Invalid Product ID");
+        }
+
+
         if (productUpdateRequest == null)
         {
             throw new ArgumentNullException(nameof(productUpdateRequest));
@@ -104,11 +114,16 @@ public class ProductsService : IProductsService
 
         Product productInput = _mapper.Map<Product>(productUpdateRequest);
 
+        //check if prodcut name is changed
+        bool isProductNameChanged = productUpdateRequest.ProductName !=existingProduct.ProductName;
+
         Product? updatedProduct = await _productRepository.UpdateProduct(productInput);
 
-        if (updatedProduct == null)
+        if (isProductNameChanged )
         {
-            return null;
+            string routingKey = "product.update.name";
+            var message = new ProductNameUpdateMessage(productInput.ProductID, productInput.ProductName);
+            _rabbitMQPublisher.Publish<ProductNameUpdateMessage>(routingKey, message);
         }
 
         ProductResponse updatedProductResponse = _mapper.Map<ProductResponse>(updatedProduct);
