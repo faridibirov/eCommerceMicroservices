@@ -1,4 +1,6 @@
-﻿namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.RabbitMQ;
+﻿using Microsoft.Extensions.Hosting;
+
+namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.RabbitMQ;
 
 public class RabbitMQProductDeleteHostedService : IHostedService
 {

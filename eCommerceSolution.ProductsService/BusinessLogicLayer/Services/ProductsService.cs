@@ -1,4 +1,5 @@
 ﻿
+using System.Linq.Expressions;
 using AutoMapper;
 using eCommerce.BusinessLogicLayer.DTO;
 using eCommerce.BusinessLogicLayer.ServiceContracts;
@@ -7,7 +8,6 @@ using eCommerce.DataAccessLayer.RepositoryContracts;
 using eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
 using FluentValidation;
 using FluentValidation.Results;
-using System.Linq.Expressions;
 
 namespace eCommerce.BusinessLogicLayer.Services;
 
@@ -115,16 +115,18 @@ public class ProductsService : IProductsService
         Product productInput = _mapper.Map<Product>(productUpdateRequest);
 
         //check if prodcut name is changed
-        bool isProductNameChanged = productUpdateRequest.ProductName !=existingProduct.ProductName;
+       // bool isProductNameChanged = productUpdateRequest.ProductName != existingProduct.ProductName;
 
         Product? updatedProduct = await _productRepository.UpdateProduct(productInput);
 
-        if (isProductNameChanged)
-        {
-            string routingKey = "product.update.name";
-            var message = new ProductNameUpdateMessage(productInput.ProductID, productInput.ProductName);
-            _rabbitMQPublisher.Publish<ProductNameUpdateMessage>(routingKey, message);
-        }
+        // string routingKey = "product.update";
+        var headers = new Dictionary<string, object>()
+            {
+                {"event", "product.update" },
+                {"RowCount", 1 }
+            };
+
+        _rabbitMQPublisher.Publish<Product>(headers, productInput);
 
         ProductResponse updatedProductResponse = _mapper.Map<ProductResponse>(updatedProduct);
 
@@ -133,7 +135,7 @@ public class ProductsService : IProductsService
 
     public async Task<bool> DeleteProduct(Guid productId)
     {
-        Product? existingProduct = await _productRepository.GetProductByCondition(temp=>temp.ProductID == productId);
+        Product? existingProduct = await _productRepository.GetProductByCondition(temp => temp.ProductID == productId);
 
         if (existingProduct == null)
         {
@@ -143,9 +145,15 @@ public class ProductsService : IProductsService
         var result = await _productRepository.DeleteProduct(productId);
         if (result)
         {
-            string routingKey = "product.delete";
-            var message = new ProductDeleteMessage(existingProduct.ProductID, existingProduct.ProductName);
-            _rabbitMQPublisher.Publish<ProductDeleteMessage>(routingKey, message);
+            //string routingKey = "product.delete";
+
+            var headers = new Dictionary<string, object>()
+            {
+                {"event", "product.delete" },
+                {"RowCount", 1 }
+            };
+
+            _rabbitMQPublisher.Publish<Product>(headers, existingProduct);
         }
 
         return result;
