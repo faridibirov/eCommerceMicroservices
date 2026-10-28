@@ -133,12 +133,21 @@ public class ProductsService : IProductsService
 
     public async Task<bool> DeleteProduct(Guid productId)
     {
-        if (productId == Guid.Empty)
+        Product? existingProduct = await _productRepository.GetProductByCondition(temp=>temp.ProductID == productId);
+
+        if (existingProduct == null)
         {
             return false;
         }
 
         var result = await _productRepository.DeleteProduct(productId);
+        if (result)
+        {
+            string routingKey = "product.delete";
+            var message = new ProductDeleteMessage(existingProduct.ProductID, existingProduct.ProductName);
+            _rabbitMQPublisher.Publish<ProductDeleteMessage>(routingKey, message);
+        }
+
         return result;
     }
 }
