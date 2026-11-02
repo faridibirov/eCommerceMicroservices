@@ -20,6 +20,12 @@ public class RabbitMQProductDeleteConsumer : IDisposable, IRabbitMQProductDelete
     public RabbitMQProductDeleteConsumer(IConfiguration configuration, ILogger<RabbitMQProductDeleteConsumer> logger, IDistributedCache distributedCache)
     {
         _configuration = configuration;
+
+        Console.WriteLine($"RabbitMQ_HostName: {_configuration["RabbitMQ_HostName"]}");
+        Console.WriteLine($"RabbitMQ_UserName: {_configuration["RabbitMQ_UserName"]}");
+        Console.WriteLine($"RabbitMQ_Password: {_configuration["RabbitMQ_Password"]}");
+        Console.WriteLine($"RabbitMQ_Port: {_configuration["RabbitMQ_Port"]}");
+
         string hostName = _configuration["RabbitMQ_HostName"]!;
         string userName = _configuration["RabbitMQ_UserName"]!;
         string password = _configuration["RabbitMQ_Password"]!;

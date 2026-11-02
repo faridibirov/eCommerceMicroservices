@@ -12,16 +12,16 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["eCommerceSolution.OrdersMicroservice.API/eCommerceSolution.OrdersMicroservice.API.csproj", "eCommerceSolution.OrdersMicroservice.API/"]
-RUN dotnet restore "./eCommerceSolution.OrdersMicroservice.API/eCommerceSolution.OrdersMicroservice.API.csproj"
+COPY ["OrdersMicroservice.API/OrdersMicroservice.API.csproj", "OrdersMicroservice.API/"]
+RUN dotnet restore "./OrdersMicroservice.API/OrdersMicroservice.API.csproj"
 COPY . .
-WORKDIR "/src/eCommerceSolution.OrdersMicroservice.API"
-RUN dotnet build "./eCommerceSolution.OrdersMicroservice.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/OrdersMicroservice.API"
+RUN dotnet build "./OrdersMicroservice.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./eCommerceSolution.OrdersMicroservice.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./OrdersMicroservice.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
@@ -34,4 +34,4 @@ ENV UsersMicroserviceName=localhost
 ENV UsersMicroservicePort=9090
 ENV ProductsMicroserviceName=localhost
 ENV ProductsMicroservicePort=8080
-ENTRYPOINT ["dotnet", "eCommerceSolution.OrdersMicroservice.API.dll"]
+ENTRYPOINT ["dotnet", "OrdersMicroservice.API.dll"]
