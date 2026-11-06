@@ -12,7 +12,7 @@ public static class ProductAPIEndpoints
         app.MapGet("/api/products", async (IProductsService productService) =>
         {
             List<ProductResponse?> products = await productService.GetProducts();
-
+            //modified
             return Results.Ok(products);
         });
 
