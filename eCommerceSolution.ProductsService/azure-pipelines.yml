@@ -13,8 +13,6 @@ resources:
 variables:
   - name: dockerRegistryServiceConnection
     value: "b27d785b-e60e-4456-8693-2073ed92dbf0"
-  - name: imageRepository
-    value: "products-microservice"
   - name: containerRegistry
     value: "faridecommercecontainerregistry.azurecr.io"
   - name: dockerfilePath
@@ -37,16 +35,10 @@ variables:
     value: "staging-ecommerce-aks-cluster-staging-1793967809498"
   - name: prodaksServiceConnectionName
     value: "prod-ecommerce-aks-cluster-prod-1793967885375"
-  - name: devKubernetesNamespace
-    value: "dev"
-  - name: qaKubernetesNamespace
-    value: "qa"
-  - name: uatKubernetesNamespace
-    value: "uat"
-  - name: stagingKubernetesNamespace
-    value: "staging"
-  - name: prodKubernetesNamespace
-    value: "prod"
+  - name: resourceGroupServiceConnectionName
+    value: "ecommerce-resource-group-connection"
+  - name: keyVaultName
+    value: "products-pipeline-kv"
 
 stages:
   - stage: Build
@@ -57,6 +49,13 @@ stages:
         pool:
           vmImage: $(vmImageName)
         steps:
+          - task: AzureKeyVault@2
+            displayName: Fetch secrets from Azure Key Vault
+            inputs:
+              azureSubscription: $(resourceGroupServiceConnectionName)
+              keyVaultName: $(keyVaultName)
+              SecretsFilter: "*"
+              RunAsPreJob: true
           - task: Docker@2
             displayName: Build and push an image to container registry
             inputs:
@@ -112,6 +111,8 @@ stages:
     displayName: Deploy to Dev
     dependsOn: Test
     condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+    variables:
+      - group: products-microservice-dev
     jobs:
       - deployment: DeploymentToDev
         displayName: Deployment to Dev Environment
@@ -137,7 +138,7 @@ stages:
                   inputs:
                     kubernetesServiceEndpoint: $(devAksServiceConnectionName)
                     kubernetesCluster: $(aksClusterName)
-                    namespace: $(devKubernetesNamespace)
+                    namespace: $(kubernetes-namespace)
                     command: apply
                     arguments: "-f $(Build.SourcesDirectory)/k8s/dev/."
 
@@ -145,6 +146,8 @@ stages:
     displayName: Deploy to QA
     dependsOn: Test
     condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/qa'))
+    variables:
+      - group: products-microservice-qa
     jobs:
       - deployment: DeploymentToQA
         displayName: Deployment to QA Environment
@@ -170,7 +173,7 @@ stages:
                   inputs:
                     kubernetesServiceEndpoint: $(qaAksServiceConnectionName)
                     kubernetesCluster: $(aksClusterName)
-                    namespace: $(qaKubernetesNamespace)
+                    namespace: $(kubernetes-namespace)
                     command: apply
                     arguments: "-f $(Build.SourcesDirectory)/k8s/qa/."
 
@@ -178,6 +181,8 @@ stages:
     displayName: Deploy to UAT
     dependsOn: Test
     condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/uat'))
+    variables:
+      - group: products-microservice-uat
     jobs:
       - deployment: DeploymentToUAT
         displayName: Deployment to UAT Environment
@@ -203,7 +208,7 @@ stages:
                   inputs:
                     kubernetesServiceEndpoint: $(uatAksServiceConnectionName)
                     kubernetesCluster: $(aksClusterName)
-                    namespace: $(uatKubernetesNamespace)
+                    namespace: $(kubernetes-namespace)
                     command: apply
                     arguments: "-f $(Build.SourcesDirectory)/k8s/uat/."
 
@@ -211,6 +216,8 @@ stages:
     displayName: Deploy to Staging
     dependsOn: Test
     condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/staging'))
+    variables:
+      - group: products-microservice-staging
     jobs:
       - deployment: DeploymentToStaging
         displayName: Deployment to Staging Environment
@@ -236,7 +243,7 @@ stages:
                   inputs:
                     kubernetesServiceEndpoint: $(stagingAksServiceConnectionName)
                     kubernetesCluster: $(aksClusterName)
-                    namespace: $(stagingKubernetesNamespace)
+                    namespace: $(kubernetes-namespace)
                     command: apply
                     arguments: "-f $(Build.SourcesDirectory)/k8s/staging/."
 
@@ -244,6 +251,8 @@ stages:
     displayName: Deploy to Production
     dependsOn: Test
     condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/prod'))
+    variables:
+      - group: products-microservice-prod
     jobs:
       - deployment: DeploymentToProd
         displayName: Deployment to Production Environment
@@ -269,6 +278,6 @@ stages:
                   inputs:
                     kubernetesServiceEndpoint: $(prodAksServiceConnectionName)
                     kubernetesCluster: $(aksClusterName)
-                    namespace: $(prodKubernetesNamespace)
+                    namespace: $(kubernetes-namespace)
                     command: apply
                     arguments: "-f $(Build.SourcesDirectory)/k8s/prod/."
