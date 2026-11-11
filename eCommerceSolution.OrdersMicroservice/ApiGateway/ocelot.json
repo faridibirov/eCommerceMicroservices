@@ -31,7 +31,7 @@
     },
     {
       "UpstreamPathTemplate": "/gateway/Orders/search/productid/{productID}/",
-      "DownstreamPathTemplate": "/api/Orders/search/prodcutid/{productID}",
+        "DownstreamPathTemplate": "/api/Orders/search/productid/{productID}",
       "DownstreamHostAndPorts": [
         {
           "Host": "orders-microservice",
