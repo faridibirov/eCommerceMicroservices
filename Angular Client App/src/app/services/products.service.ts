@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 import { ProductResponse } from '../models/product-response';
 import { ProductUpdateRequest } from '../models/product-update-request';
 import { NewProductRequest } from '../models/new-product-request';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +14,18 @@ export class ProductsService {
   private productsAPIURL: string = environment.productsAPIURL;
   public isAuthenticated: boolean = false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private usersService: UsersService) {
   }
 
   getProducts(): Observable<ProductResponse[]> {
-    return this.http.get<ProductResponse[]>(`${this.productsAPIURL}`);
+    const token = this.usersService.getAuthToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`  // Add the token in the Authorization header
+    });
+
+
+    return this.http.get<ProductResponse[]>(`${this.productsAPIURL}`, { headers });
   }
 
   searchProducts(searchString: string): Observable<ProductResponse[]> {

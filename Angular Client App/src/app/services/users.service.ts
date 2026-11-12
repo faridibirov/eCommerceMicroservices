@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { AuthenticationResponse } from '../models/authentication-response';
-import { Register } from '../models/register';
 import { environment } from '../../environment';
+import { Claim } from '../models/claim';
+import { MsalService } from '@azure/msal-angular';
 
 @Injectable({
   providedIn: 'root',
@@ -12,61 +12,55 @@ export class UsersService {
   private usersAPIURL: string = environment.usersAPIURL;
 
   public isAuthenticated: boolean = false;
+  public claims: Claim[] = [];
+
   public isAdmin: boolean = false;
-  public currentUserName: string | null = "";
-  public authResponse: AuthenticationResponse | null = null;
+  public adminUserId: string = '7654da76-f945-4e20-ba67-aba7f6736d7e';
+  public currentUserName: string = '';
+  public currentUserId: string = '';
 
-  constructor(private http: HttpClient) {
-    // Check local storage for authentication status on application startup
-    this.isAuthenticated = !!localStorage.getItem('authToken');
-    const isAdminValue = localStorage.getItem('isAdmin');
-    this.isAdmin = isAdminValue !== null && isAdminValue !== undefined && isAdminValue.toLowerCase() === 'true';
-    this.currentUserName = localStorage.getItem("currentUserName");
-    if (localStorage.getItem("authResponse"))
-      this.authResponse = JSON.parse(localStorage.getItem("authResponse")!);
+  constructor(private http: HttpClient) {}
+
+  getClaim(claimName: string): Claim {
+    return this.claims.find((temp) => temp.claim == claimName) as Claim;
   }
 
-  register(register: Register): Observable<AuthenticationResponse> {
-    return this.http.post<AuthenticationResponse>(`${this.usersAPIURL}auth/register`, register);
+  setClaims(claims: Claim[]) {
+    this.claims = claims;
   }
 
-  login(email: string, password: string): Observable<AuthenticationResponse> {
-    // Check if the provided email and password match the admin user
-    if (email === 'admin@example.com' && password === 'admin') {
-      // If it's the admin user, return a custom Observable
-      const adminUser: AuthenticationResponse = {
-        userID: 'admin_id',
-        personName: 'Admin',
-        email: 'admin@example.com',
-        gender: 'male', // Add the appropriate gender for the admin user
-        token: 'admin_token',
-        success: true
-      };
+  setIsAuthenticated(authService: MsalService) {
+    const account =
+      authService.instance.getActiveAccount() ??
+      authService.instance.getAllAccounts()[0];
 
-      return of(adminUser);
-    } else {
-      return this.http.post<AuthenticationResponse>(`${this.usersAPIURL}auth/login`, { email, password });
+    this.isAuthenticated = !!account;
+
+    if (!account) {
+      this.isAdmin = false;
+      this.currentUserId = '';
+      this.currentUserName = '';
+      return;
     }
+
+    const oid = account.idTokenClaims?.oid;
+
+    if (!oid) {
+      console.error('OID claim not found in ID token');
+      return;
+    }
+
+    this.currentUserId = oid;
+    this.isAdmin = oid === this.adminUserId;
+
+    this.currentUserName =
+      (account.idTokenClaims?.['given_name'] as string | undefined) ??
+      account.name ??
+      '';
   }
 
-  
-  setAuthStatus(authResponse: AuthenticationResponse, token: string, isAdmin: boolean, currentUserName: string): void {
-    this.isAuthenticated = true;
-    this.isAdmin = isAdmin;
-    localStorage.setItem('authToken', token);
-    localStorage.setItem('isAdmin', isAdmin.toString());
-    localStorage.setItem('currentUserName', currentUserName);
-    localStorage.setItem('authResponse', JSON.stringify(authResponse));
-    this.currentUserName = currentUserName;
-    this.authResponse = authResponse;
-  }
-
-
-  logout(): void {
-    this.isAuthenticated = false;
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('isAdmin');
-    localStorage.removeItem('currentUserName');
-    this.authResponse = null;
+  getAuthToken(): any {
+    const token: any = localStorage.getItem('authToken');
+    return token;
   }
 }

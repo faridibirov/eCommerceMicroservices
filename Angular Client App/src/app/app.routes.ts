@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { RegisterComponent } from './components/register/register.component';
-import { LoginComponent } from './components/login/login.component';
 import { ShowCaseComponent } from './components/show-case/show-case.component';
 import { SearchComponent } from './components/search/search.component';
 import { ProductsComponent } from './components/products/products.component';
@@ -12,8 +10,6 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { AdminOrdersComponent } from './components/admin-orders/admin-orders.component';
 
 export const routes: Routes = [
-    { path: 'auth/register', component: RegisterComponent },
-    { path: 'auth/login', component: LoginComponent },
     { path: 'products/showcase', component: ShowCaseComponent },
     { path: 'products/search/:str?', component: SearchComponent },
     { path: 'products/search', component: SearchComponent },
@@ -24,6 +20,5 @@ export const routes: Routes = [
     { path: 'cart', component: CartComponent },
     { path: 'orders', component: OrdersComponent },
     { path: 'admin/orders', component: AdminOrdersComponent },
-    { path: '**', redirectTo: '/auth/login', pathMatch: 'full' },
-    { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
+    { path: '**', redirectTo: '/products/showcase', pathMatch: 'full' },
 ];

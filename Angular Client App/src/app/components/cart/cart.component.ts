@@ -50,6 +50,7 @@ export class CartComponent {
     this.cartService.newOrder().subscribe({
       next: (response: OrderResponse) => {
         if (response)
+          this.cartService.clearCartItems();
           this.router.navigate(['orders']);
       },
       error: (error: any) => {

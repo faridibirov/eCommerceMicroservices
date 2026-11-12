@@ -5,6 +5,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
+using Azure.Identity;
 
 namespace eCommerce.Core;
 

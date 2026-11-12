@@ -12,13 +12,13 @@
     </a>
 
     <a mat-button [routerLink]="['/cart']" class="side-bar-button" routerLinkActive="active-link"
-      *ngIf="usersService.isAuthenticated && usersService.isAdmin == false">
+      *ngIf="usersService.isAuthenticated && !usersService.isAdmin">
       <mat-icon>shopping_cart</mat-icon>
       <span>Cart</span>
     </a>
 
     <a mat-button [routerLink]="['/orders']" class="side-bar-button" routerLinkActive="active-link"
-      *ngIf="usersService.isAuthenticated && usersService.isAdmin == false">
+      *ngIf="usersService.isAuthenticated && !usersService.isAdmin">
       <mat-icon>receipt</mat-icon>
       <span>Orders</span>
     </a>
@@ -60,13 +60,13 @@
         </div>
       </form>
 
-      <a mat-button [routerLink]="['auth', 'register']" class="top-bar-button" routerLinkActive="active-link"
+      <a mat-button (click)="signUpRedirect()" class="top-bar-button" routerLinkActive="active-link"
         *ngIf="!usersService.isAuthenticated">
         <mat-icon>person_add</mat-icon>
         <span>Register</span>
       </a>
 
-      <a mat-button [routerLink]="['auth', 'login']" class="top-bar-button" routerLinkActive="active-link"
+      <a mat-button (click)="loginRedirect()" class="top-bar-button" routerLinkActive="active-link"
         *ngIf="!usersService.isAuthenticated">
         <mat-icon>person</mat-icon>
         <span>Login</span>

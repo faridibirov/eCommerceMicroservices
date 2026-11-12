@@ -69,7 +69,7 @@ export class CartService {
 
     newOrder(): Observable<OrderResponse> {
         var newOrderRequest: NewOrderRequest = {
-            userID: this.usersService.authResponse?.userID!,
+            userID: this.usersService.currentUserId,
             orderDate: new Date(),
             orderItems: []
         };

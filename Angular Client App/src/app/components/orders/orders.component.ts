@@ -15,9 +15,17 @@ import { OrderItemResponse } from '../../models/order-item-response';
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatDividerModule, MatButtonModule, MatIconModule, MatTableModule, RouterModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    RouterModule,
+  ],
   templateUrl: './orders.component.html',
-  styleUrl: './orders.component.css'
+  styleUrl: './orders.component.css',
 })
 export class OrdersComponent {
   orders: OrderResponse[] = [];
@@ -25,12 +33,16 @@ export class OrdersComponent {
   cartItemsDataSource: MatTableDataSource<CartItem>[] = [];
   isLoaded: boolean = false;
 
-  constructor(private cartService: CartService, public usersService: UsersService, private router: Router) {
-  }
+  constructor(
+    private cartService: CartService,
+    public usersService: UsersService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     //console.log(this.usersService.authResponse);
-    this.cartService.getOrdersByUserID(this.usersService.authResponse?.userID!)
+    this.cartService
+      .getOrdersByUserID(this.usersService.getClaim('oid').value!)
       .subscribe({
         next: (response: OrderResponse[]) => {
           this.isLoaded = true;
@@ -40,13 +52,12 @@ export class OrdersComponent {
           this.orders.forEach((order: OrderResponse) => {
             var cartItemDataSource = new MatTableDataSource<CartItem>([]);
             order.orderItems.forEach((orderItem: OrderItemResponse) => {
-
               var cartItem: CartItem = {
                 productID: orderItem.productID,
                 productName: orderItem.productName,
                 unitPrice: orderItem.unitPrice,
                 quantity: orderItem.quantity,
-                category: orderItem.category
+                category: orderItem.category,
               };
 
               //console.log(cartItem);
@@ -54,12 +65,12 @@ export class OrdersComponent {
               cartItemDataSource.data.push(cartItem);
             });
             this.cartItemsDataSource.push(cartItemDataSource);
-          })
+          });
         },
         error: (err) => {
           this.isLoaded = true;
           console.log(err);
-        }
+        },
       });
   }
 }
