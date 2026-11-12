@@ -6,10 +6,11 @@ using eCommerce.Core.Mappers;
 using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://0.0.0.0:9090");
 
 //Add Infrastructure services
 builder.Services.AddInfrastructure();
-builder.Services.AddCore();
+builder.Services.AddCore(builder.Configuration);
 
 //Add controllers to the service collection
 builder.Services.AddControllers().AddJsonOptions(options=>

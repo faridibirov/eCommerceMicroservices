@@ -10,10 +10,12 @@ internal class UsersService : IUsersService
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IMapper _mapper;
-    public UsersService(IUsersRepository usersRepository, IMapper mapper)
+    private readonly GraphServiceClient _graphServiceClient;
+    public UsersService(IUsersRepository usersRepository, IMapper mapper, GraphServiceClient graphServiceClient)
     {
         _usersRepository = usersRepository;
         _mapper = mapper;
+        _graphServiceClient = graphServiceClient;
 
     }
 
@@ -62,9 +64,19 @@ internal class UsersService : IUsersService
 
     public async Task<UserDTO> GetUserByUserID(Guid UserID)
     {
-        ApplicationUser? user = await _usersRepository.GetUserByUserID(UserID);
+        //ApplicationUser? user = await _usersRepository.GetUserByUserID(UserID);
 
-        return _mapper.Map<UserDTO>(user);
+       var existingUser = await _graphServiceClient.Users[Convert.ToString(UserID)].GetAsync();
+
+        if(existingUser == null)
+        {
+            return null;
+        }
+        Console.WriteLine(JsonSerializer.Serialize(existingUser));
+
+        var user = new UserDTO(UserID, existingUser.UserPrincipalName, existingUser.GivenName, existingUser.Surname);
+
+        return user;
     }
 
 
