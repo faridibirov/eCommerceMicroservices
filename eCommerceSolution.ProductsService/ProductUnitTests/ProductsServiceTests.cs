@@ -4,6 +4,7 @@ using eCommerce.BusinessLogicLayer.DTO;
 using eCommerce.DataAccessLayer.Entities;
 using eCommerce.DataAccessLayer.RepositoryContracts;
 using eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
+using eCommerce.ProductsService.BusinessLogicLayer.ServiceBus;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
@@ -20,7 +21,7 @@ public class ProductsServiceTests
     private readonly Mock<IValidator<ProductUpdateRequest>> _productUpdateRequestValidatorMock;
     private readonly Mock<IRabbitMQPublisher> _rabbitMQPublisherMock;
     private readonly eCommerce.BusinessLogicLayer.Services.ProductsService _productsService;
-    private readonly Mock<ServiceBusPublisher> _serviceBusPublisherMock;
+    private readonly Mock<IServiceBusPublisher> _serviceBusPublisherMock;
     private readonly Fixture _fixture;
 
     public ProductsServiceTests()
@@ -30,7 +31,7 @@ public class ProductsServiceTests
         _productAddRequestValidatorMock = new Mock<IValidator<ProductAddRequest>>();
         _productUpdateRequestValidatorMock = new Mock<IValidator<ProductUpdateRequest>>();
         _rabbitMQPublisherMock = new Mock<IRabbitMQPublisher>();
-        _serviceBusPublisherMock = new Mock<ServiceBusPublisher>();
+        _serviceBusPublisherMock = new Mock<IServiceBusPublisher>();
         _fixture = new Fixture();
 
         _productsService = new eCommerce.BusinessLogicLayer.Services.ProductsService(

@@ -31,7 +31,7 @@
     },
     {
       "UpstreamPathTemplate": "/gateway/Orders/search/productid/{productID}/",
-        "DownstreamPathTemplate": "/api/Orders/search/productid/{productID}",
+      "DownstreamPathTemplate": "/api/Orders/search/productid/{productID}",
       "DownstreamHostAndPorts": [
         {
           "Host": "orders-microservice",
@@ -98,7 +98,7 @@
         "RetryOnServerError": true
       },
       "RateLimitOptions": {
-        "Limit": 30,
+        "Limit": 300,
         "Period": "60s",
         "HttpStatusCode": 429,
         "EnableRateLimiting": true,

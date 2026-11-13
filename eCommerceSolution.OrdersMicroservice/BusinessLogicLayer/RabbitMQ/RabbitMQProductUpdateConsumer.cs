@@ -29,12 +29,12 @@ public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdate
         Console.WriteLine($"RabbitMQ_HostName: {_configuration["RabbitMQ_HostName"]}");
         Console.WriteLine($"RabbitMQ_UserName: {_configuration["RabbitMQ_UserName"]}");
         Console.WriteLine($"RabbitMQ_Password: {_configuration["RabbitMQ_Password"]}");
-        Console.WriteLine($"RabbitMQ_Port: {_configuration["RabbitMQ_Port"]}");
+        Console.WriteLine($"RabbitMQ_ConnectionPort: {_configuration["RabbitMQ_ConnectionPort"]}");
 
         string hostName = _configuration["RabbitMQ_HostName"]!;
         string userName = _configuration["RabbitMQ_UserName"]!;
         string password = _configuration["RabbitMQ_Password"]!;
-        string port = _configuration["RabbitMQ_Port"]!;
+        string port = _configuration["RabbitMQ_ConnectionPort"]!;
 
         ConnectionFactory connectionFactory = new ConnectionFactory()
         {

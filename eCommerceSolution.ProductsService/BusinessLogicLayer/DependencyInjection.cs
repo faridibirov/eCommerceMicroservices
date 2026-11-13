@@ -1,9 +1,11 @@
-﻿using eCommerce.BusinessLogicLayer.Mappers;
+﻿using Azure.Messaging.ServiceBus;
+using eCommerce.BusinessLogicLayer.Mappers;
 using eCommerce.BusinessLogicLayer.ServiceContracts;
 using eCommerce.BusinessLogicLayer.Validators;
 using eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
 using eCommerce.ProductsService.BusinessLogicLayer.ServiceBus;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -21,8 +23,8 @@ public static class DependencyInjection
         services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();
 
         //ServiceBus
-        services.AddSingleton(_ => new ServiceBus(configuration["ServiceBus:ecommerce-servicebus-namespace"]));
-        services.AddSingleTon<IServiceBusPublisher, ServiceBusPublisher>();
+        services.AddSingleton( _ => new ServiceBusClient(configuration["ServiceBus:ecommerce-servicebus-namespace"]));
+        services.AddSingleton<IServiceBusPublisher, ServiceBusPublisher>();
 
         return services;
     }

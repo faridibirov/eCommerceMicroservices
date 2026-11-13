@@ -1,4 +1,8 @@
-﻿namespace eCommerce.ProductsService.BusinessLogicLayer.ServiceBus;
+﻿using System.Text.Json;
+using Azure.Messaging.ServiceBus;
+using Microsoft.Extensions.Configuration;
+
+namespace eCommerce.ProductsService.BusinessLogicLayer.ServiceBus;
 
 public class ServiceBusPublisher : IServiceBusPublisher
 {

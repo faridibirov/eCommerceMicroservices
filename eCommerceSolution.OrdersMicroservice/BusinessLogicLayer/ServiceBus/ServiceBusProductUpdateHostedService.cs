@@ -11,7 +11,7 @@ public class ServiceBusProductUpdateHostedService : IHostedService
         _consumer = consumer;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
        await _consumer.ConsumeAsync();
     }

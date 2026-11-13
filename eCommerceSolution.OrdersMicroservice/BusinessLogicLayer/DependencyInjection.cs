@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.RabbitMQ;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.ServiceBus;
+using Azure.Messaging.ServiceBus;
 
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer;
 

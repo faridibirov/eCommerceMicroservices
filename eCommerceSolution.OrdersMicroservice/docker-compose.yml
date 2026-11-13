@@ -18,7 +18,7 @@ services:
       - RabbitMQ_HostName=rabbitmq
       - RabbitMQ_UserName=user
       - RabbitMQ_Password=password
-      - RabbitMQ_Port=5672
+      - RabbitMQ_ConnectionPort=5672
       - RabbitMQ_Products_Exchange=product.exchange
     ports:
       - "7000:8080"
@@ -33,7 +33,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ../mongodb-init:/docker-entrypoint-initdb.d
+      - ../mongodb/mongodb-init:/docker-entrypoint-initdb.d
     networks:
       - orders-mongodb-network
 
@@ -50,7 +50,7 @@ services:
       - RabbitMQ_HostName=rabbitmq
       - RabbitMQ_UserName=user
       - RabbitMQ_Password=password
-      - RabbitMQ_Port=5672
+      - RabbitMQ_ConnectionPort=5672
       - RabbitMQ_Products_Exchange=product.exchange
     ports:
       - "6001:8080"
@@ -67,7 +67,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ../mysql-init:/docker-entrypoint-initdb.d
+      - ../mysql/mysql-init:/docker-entrypoint-initdb.d
     networks:
       - products-mysql-network
 
@@ -98,7 +98,7 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - ../postgres-init:/docker-entrypoint-initdb.d
+      - ../postgres/postgres-init:/docker-entrypoint-initdb.d
     networks:
       - users-postgres-network
 

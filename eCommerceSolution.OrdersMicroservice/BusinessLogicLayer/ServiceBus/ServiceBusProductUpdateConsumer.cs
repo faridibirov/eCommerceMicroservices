@@ -1,4 +1,9 @@
-﻿using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
+﻿using System.Text.Json;
+using Azure.Messaging.ServiceBus;
+using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.ServiceBus;
 
@@ -9,7 +14,7 @@ public class ServiceBusProductUpdateConsumer : IServiceBusProductUpdateConsumer
     private readonly ILogger<ServiceBusProductUpdateConsumer> _logger;
     private readonly IConfiguration _configuration;
 
-    public ServiceBusProductUpdateConsumer(ServiceBusProcessor serviceBusProcessor, IDistributedCache distributedCache,
+    public ServiceBusProductUpdateConsumer(IDistributedCache distributedCache,
         ILogger<ServiceBusProductUpdateConsumer> logger, ServiceBusClient serviceBusClient, IConfiguration configuration)
     {
 
@@ -20,7 +25,7 @@ public class ServiceBusProductUpdateConsumer : IServiceBusProductUpdateConsumer
             new ServiceBusProcessorOptions()
             { AutoCompleteMessages = false });
         _serviceBusProcessor.ProcessMessageAsync += _serviceBusProcessor_ProcessMessageAsync;
-        _serviceBusProcessor.ProcessErrorAsync += _serviceBusProcessor.ProcessErrorAsync;
+        _serviceBusProcessor.ProcessErrorAsync += _serviceBusProcessor_ProcessErrorAsync;
     }
 
     private async Task _serviceBusProcessor_ProcessMessageAsync(ProcessMessageEventArgs arg)
@@ -48,7 +53,7 @@ public class ServiceBusProductUpdateConsumer : IServiceBusProductUpdateConsumer
         await _distributedCache.SetStringAsync(cacheKeyToWrite, productJson, options);
     }
 
-    private async Task _serviceBusProcessor.ProcessErrorAsync(ProcessErrorEventArgs arg)
+    private  Task _serviceBusProcessor_ProcessErrorAsync(ProcessErrorEventArgs arg)
     {
         _logger.LogError(arg.Exception, "Error while handling message.");
         return Task.CompletedTask;
