@@ -12,15 +12,20 @@ namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.RabbitMQ;
 public class RabbitMQProductDeleteConsumer : IDisposable, IRabbitMQProductDeleteConsumer
 {
     private readonly IConfiguration _configuration;
-    private readonly IModel _channel;
-    private readonly IConnection _connection;
+    private  IModel _channel;
+    private  IConnection _connection;
     private readonly ILogger<RabbitMQProductDeleteConsumer> _logger;
     private readonly IDistributedCache _distributedCache;
 
     public RabbitMQProductDeleteConsumer(IConfiguration configuration, ILogger<RabbitMQProductDeleteConsumer> logger, IDistributedCache distributedCache)
     {
         _configuration = configuration;
+        _logger = logger;
+        _distributedCache = distributedCache;
+    }
 
+    private void SetupConnectionAndChannel()
+    {
         Console.WriteLine($"RabbitMQ_HostName: {_configuration["RabbitMQ_HostName"]}");
         Console.WriteLine($"RabbitMQ_UserName: {_configuration["RabbitMQ_UserName"]}");
         Console.WriteLine($"RabbitMQ_Password: {_configuration["RabbitMQ_Password"]}");
@@ -40,8 +45,27 @@ public class RabbitMQProductDeleteConsumer : IDisposable, IRabbitMQProductDelete
         };
         _connection = connectionFactory.CreateConnection();
         _channel = _connection.CreateModel();
-        _logger = logger;
-        _distributedCache = distributedCache;
+    }
+
+    public void Initialize(int delayMilliseconds = 3000)
+    {
+        bool connected = false;
+        int attempt = 0;
+        while (!connected)
+        {
+            try
+            {
+                SetupConnectionAndChannel();
+                connected = true;
+                _logger.LogInformation("RabbitMQ Connected.");
+            }
+            catch (Exception ex)
+            {
+                attempt++;
+                _logger.LogError(ex, $"Connection failed with RabbitMQ. Retrying in {delayMilliseconds} ms.");
+                Thread.Sleep(delayMilliseconds);
+            }
+        }
     }
 
     public void Consume()

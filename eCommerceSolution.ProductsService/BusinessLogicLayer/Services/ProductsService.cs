@@ -6,6 +6,7 @@ using eCommerce.BusinessLogicLayer.ServiceContracts;
 using eCommerce.DataAccessLayer.Entities;
 using eCommerce.DataAccessLayer.RepositoryContracts;
 using eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
+using eCommerce.ProductsService.BusinessLogicLayer.ServiceBus;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -18,15 +19,17 @@ public class ProductsService : IProductsService
     private readonly IMapper _mapper;
     private readonly IProductsRepository _productRepository;
     private readonly IRabbitMQPublisher _rabbitMQPublisher;
+    private readonly IServiceBusPublisher _serviceBusPublisher;
 
     public ProductsService(IValidator<ProductAddRequest> productAddRequestValidator, IValidator<ProductUpdateRequest> productUpdateRequestValidator,
-         IMapper mapper, IProductsRepository productRepository, IRabbitMQPublisher rabbitMQPublisher)
+         IMapper mapper, IProductsRepository productRepository, IRabbitMQPublisher rabbitMQPublisher, IServiceBusPublisher serviceBusPublisher)
     {
         _productAddRequestValidator = productAddRequestValidator;
         _productUpdateRequestValidator = productUpdateRequestValidator;
         _mapper = mapper;
         _productRepository = productRepository;
         _rabbitMQPublisher = rabbitMQPublisher;
+        _serviceBusPublisher = serviceBusPublisher;
     }
 
     public async Task<ProductResponse?> AddProduct(ProductAddRequest productAddRequest)
@@ -129,6 +132,7 @@ public class ProductsService : IProductsService
         _rabbitMQPublisher.Publish<Product>(headers, productInput);
 
         ProductResponse updatedProductResponse = _mapper.Map<ProductResponse>(updatedProduct);
+        await _serviceBusPublisher.Publish(headers, updatedProductResponse);
 
         return updatedProductResponse;
     }

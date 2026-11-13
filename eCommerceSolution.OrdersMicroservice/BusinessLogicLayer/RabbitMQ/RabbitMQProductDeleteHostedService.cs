@@ -13,6 +13,7 @@ public class RabbitMQProductDeleteHostedService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
+        _consumer.Initialize(4000);
         _consumer.Consume();
         return Task.CompletedTask;
     }

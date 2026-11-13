@@ -2,6 +2,7 @@
 {
     public interface IRabbitMQProductDeleteConsumer
     {
+        void Initialize(int delayMilliseconds);
         void Consume();
         void Dispose();
     }

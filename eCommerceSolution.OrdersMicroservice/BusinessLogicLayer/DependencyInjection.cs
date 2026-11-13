@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.RabbitMQ;
+using eCommerce.OrdersMicroservice.BusinessLogicLayer.ServiceBus;
 
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer;
 
@@ -25,10 +26,15 @@ public static class DependencyInjection
             options.Configuration = $"{configuration["REDIS_HOST"]}:{configuration["REDIS_PORT"]}";
         });
 
-        services.AddTransient<IRabbitMQProductNameUpdateConsumer, RabbitMQProductNameUpdateConsumer>();
+        services.AddTransient<IRabbitMQProductUpdateConsumer, RabbitMQProductUpdateConsumer>();
         services.AddTransient<IRabbitMQProductDeleteConsumer, RabbitMQProductDeleteConsumer>();
-        services.AddHostedService<RabbitMQProductNameUpdateHostedService>();
+        services.AddHostedService<RabbitMQProductUpdateHostedService>();
         services.AddHostedService<RabbitMQProductDeleteHostedService>();
+
+        //ServiceBus
+        services.AddSingleton(_ => new ServiceBusClient(configuration["ServiceBus:ecommerce-servicebus-namespace"]));
+        services.AddSingleton<IServiceBusProductUpdateConsumer, ServiceBusProductUpdateConsumer>();
+        services.AddHostedService<ServiceBusProductUpdateHostedService>();
 
         return services;
     }

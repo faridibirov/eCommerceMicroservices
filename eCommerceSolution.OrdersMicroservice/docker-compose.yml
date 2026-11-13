@@ -1,6 +1,6 @@
 services:
-  ordersmicroservice.api:
-    image: ordersmicroserviceapi
+  orders-microservice:
+    image: orders-microservice
     build:
       context: .
       dockerfile: OrdersMicroservice.API/Dockerfile
