@@ -2,5 +2,6 @@
 
 public interface IRabbitMQPublisher
 {
-    void Publish<T>(Dictionary<string, object> headers, T message);
+    Task Publish<T>(Dictionary<string, object> headers, T message);
+    Task Initialize();
 }

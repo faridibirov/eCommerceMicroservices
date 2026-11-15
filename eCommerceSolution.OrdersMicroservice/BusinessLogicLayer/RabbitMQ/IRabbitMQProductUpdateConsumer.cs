@@ -2,8 +2,8 @@
 {
     public interface IRabbitMQProductUpdateConsumer
     {
-        void Initialize(int delayMilliseconds);
-        void Consume();
+        Task Initialize(int delayMilliseconds);
+        Task Consume();
         void Dispose();
     }
 }

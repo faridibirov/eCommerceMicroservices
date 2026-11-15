@@ -8,13 +8,17 @@ namespace eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
 public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
 {
     private readonly IConfiguration _configuration;
-    private readonly IModel _channel;
-    private readonly IConnection _connection;
+    private  IChannel _channel;
+    private  IConnection _connection;
 
     public RabbitMQPublisher(IConfiguration configuration)
     {
         _configuration = configuration;
+    }
 
+
+    public async Task Initialize()
+    {
         Console.WriteLine($"RabbitMQ_HostName: {_configuration["RabbitMQ_HostName"]}");
         Console.WriteLine($"RabbitMQ_UserName: {_configuration["RabbitMQ_UserName"]}");
         Console.WriteLine($"RabbitMQ_Password: {_configuration["RabbitMQ_Password"]}");
@@ -32,24 +36,24 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
             Password = password,
             Port = Convert.ToInt32(port)
         };
-        _connection = connectionFactory.CreateConnection();
-        _channel = _connection.CreateModel();
+        _connection = await connectionFactory.CreateConnectionAsync();
+        _channel = await _connection.CreateChannelAsync();
     }
 
-    public void Publish<T>(Dictionary<string, object> headers, T message)
+    public async Task Publish<T>(Dictionary<string, object> headers, T message)
     {
         string messageJson = JsonSerializer.Serialize(message);
         byte[] messageBodyInBytes = Encoding.UTF8.GetBytes(messageJson);
 
         //Create exchange
         string exchangeName = _configuration["RabbitMQ_Products_Exchange"]!;
-        _channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Headers, durable: true);
+        await _channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Headers, durable: true);
 
-        var basicProperties = _channel.CreateBasicProperties();
+        var basicProperties = new BasicProperties();
         basicProperties.Headers = headers;
 
         //PUblish message
-        _channel.BasicPublish(exchange: exchangeName, routingKey: string.Empty, basicProperties: basicProperties, body: messageBodyInBytes);
+       await _channel.BasicPublishAsync(exchange: exchangeName, routingKey: string.Empty, mandatory:true, basicProperties: basicProperties, body: messageBodyInBytes);
     }
 
     public void Dispose()

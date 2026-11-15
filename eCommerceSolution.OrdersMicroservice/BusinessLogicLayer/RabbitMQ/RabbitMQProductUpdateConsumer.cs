@@ -6,13 +6,14 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.RabbitMQ;
 
 public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdateConsumer
 {
     private readonly IConfiguration _configuration;
-    private IModel _channel;
+    private IChannel _channel;
     private IConnection _connection;
     private readonly ILogger<RabbitMQProductUpdateConsumer> _logger;
     private readonly IDistributedCache _distributedCache;
@@ -24,7 +25,7 @@ public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdate
         _distributedCache = distributedCache;
     }
 
-    private void SetupConnectionAndChannel()
+    private async Task SetupConnectionAndChannel()
     {
         Console.WriteLine($"RabbitMQ_HostName: {_configuration["RabbitMQ_HostName"]}");
         Console.WriteLine($"RabbitMQ_UserName: {_configuration["RabbitMQ_UserName"]}");
@@ -43,11 +44,11 @@ public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdate
             Password = password,
             Port = Convert.ToInt32(port)
         };
-        _connection = connectionFactory.CreateConnection();
-        _channel = _connection.CreateModel();
+        _connection = await connectionFactory.CreateConnectionAsync();
+        _channel = await _connection.CreateChannelAsync();
     }
 
-    public void Initialize(int delayMilliseconds = 3000)
+    public async Task Initialize(int delayMilliseconds = 3000)
     {
         bool connected = false;
         int attempt = 0;
@@ -55,7 +56,7 @@ public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdate
         {
             try
             {
-                SetupConnectionAndChannel();
+                await SetupConnectionAndChannel();
                 connected = true;
                 _logger.LogInformation("RabbitMQ Connected.");
             }
@@ -68,7 +69,7 @@ public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdate
         }
     }
 
-    public void Consume()
+    public async Task Consume()
     {
         // string routingKey = "product.update.name";
         var headers = new Dictionary<string, object>()
@@ -82,17 +83,17 @@ public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdate
 
         //Create exchange
         string exchangeName = _configuration["RabbitMQ_Products_Exchange"]!;
-        _channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Headers, durable: true);
+       await _channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Headers, durable: true);
 
         //Create message queue
-        _channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+       await _channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
 
         //Bind the message to exchange
-        _channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: string.Empty, arguments: headers);
+       await _channel.QueueBindAsync(queue: queueName, exchange: exchangeName, routingKey: string.Empty, arguments: headers);
 
-        var consumer = new EventingBasicConsumer(_channel);
+        var consumer = new AsyncEventingBasicConsumer(_channel);
 
-        consumer.Received += async (sender, args) =>
+        consumer.ReceivedAsync += async (sender, args) =>
         {
             byte[] body = args.Body.ToArray();
             string message = Encoding.UTF8.GetString(body);
@@ -107,7 +108,7 @@ public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdate
 
         };
 
-        _channel.BasicConsume(queue: queueName, consumer: consumer, autoAck: true);
+       await _channel.BasicConsumeAsync(queue: queueName, consumer: consumer, autoAck: true);
     }
 
 

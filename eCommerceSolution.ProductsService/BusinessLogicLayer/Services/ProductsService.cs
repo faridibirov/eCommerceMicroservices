@@ -118,7 +118,7 @@ public class ProductsService : IProductsService
         Product productInput = _mapper.Map<Product>(productUpdateRequest);
 
         //check if prodcut name is changed
-       // bool isProductNameChanged = productUpdateRequest.ProductName != existingProduct.ProductName;
+        // bool isProductNameChanged = productUpdateRequest.ProductName != existingProduct.ProductName;
 
         Product? updatedProduct = await _productRepository.UpdateProduct(productInput);
 
@@ -129,7 +129,8 @@ public class ProductsService : IProductsService
                 {"RowCount", 1 }
             };
 
-        _rabbitMQPublisher.Publish<Product>(headers, productInput);
+        await _rabbitMQPublisher.Initialize();
+        await _rabbitMQPublisher.Publish<Product>(headers, productInput);
 
         ProductResponse updatedProductResponse = _mapper.Map<ProductResponse>(updatedProduct);
         await _serviceBusPublisher.Publish(headers, updatedProductResponse);
@@ -156,8 +157,8 @@ public class ProductsService : IProductsService
                 {"event", "product.delete" },
                 {"RowCount", 1 }
             };
-
-            _rabbitMQPublisher.Publish<Product>(headers, existingProduct);
+            await _rabbitMQPublisher.Initialize();
+            await _rabbitMQPublisher.Publish<Product>(headers, existingProduct);
         }
 
         return result;

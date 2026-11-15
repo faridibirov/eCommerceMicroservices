@@ -34,7 +34,7 @@ spec:
               value: admin
             - name: RabbitMQ_HostName
               value: rabbitmq
-            - name: RabbitMQ_Port
+            - name: RabbitMQ_ConnectionPort
               value: "5672"
             - name: RabbitMQ_UserName
               value: guest

@@ -11,11 +11,10 @@ public class RabbitMQProductUpdateHostedService : IHostedService
         _consumer = consumer;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _consumer.Initialize(4000);
-        _consumer.Consume();
-        return Task.CompletedTask;
+        await _consumer.Initialize(4000);
+        await _consumer.Consume();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
