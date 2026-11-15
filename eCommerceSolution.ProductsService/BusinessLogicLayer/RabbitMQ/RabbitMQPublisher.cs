@@ -8,8 +8,8 @@ namespace eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
 public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
 {
     private readonly IConfiguration _configuration;
-    private  IChannel _channel;
-    private  IConnection _connection;
+    private IChannel _channel;
+    private IConnection _connection;
 
     public RabbitMQPublisher(IConfiguration configuration)
     {
@@ -53,12 +53,19 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
         basicProperties.Headers = headers;
 
         //PUblish message
-       await _channel.BasicPublishAsync(exchange: exchangeName, routingKey: string.Empty, mandatory:true, basicProperties: basicProperties, body: messageBodyInBytes);
+        await _channel.BasicPublishAsync(exchange: exchangeName, routingKey: string.Empty, mandatory: true, basicProperties: basicProperties, body: messageBodyInBytes);
     }
 
     public void Dispose()
     {
-        _channel.Dispose();
-        _connection.Dispose();
+        if (_channel != null && !_channel.IsClosed)
+        {
+            _channel.Dispose();
+        }
+
+        if (_connection != null && _connection.IsOpen)
+        {
+            _connection.Dispose();
+        }
     }
 }

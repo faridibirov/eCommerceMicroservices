@@ -21,7 +21,7 @@ public class ServiceBusProductUpdateConsumer : IServiceBusProductUpdateConsumer
         _distributedCache = distributedCache;
         _logger = logger;
         _configuration = configuration;
-        _serviceBusProcessor = serviceBusClient.CreateProcessor(_configuration["ServiceBus:ServiceBus_Products_Topic"], _configuration["ServiceBus:ServiceBus_Products_Topic_Orders_Subscriptions"],
+        _serviceBusProcessor = serviceBusClient.CreateProcessor(_configuration["ServiceBus:ServiceBus_Products_Update_Topic"], _configuration["ServiceBus:ServiceBus_Products_Update_Topic_Orders_Subscriptions"],
             new ServiceBusProcessorOptions()
             { AutoCompleteMessages = false });
         _serviceBusProcessor.ProcessMessageAsync += _serviceBusProcessor_ProcessMessageAsync;
@@ -48,7 +48,7 @@ public class ServiceBusProductUpdateConsumer : IServiceBusProductUpdateConsumer
              .SetAbsoluteExpiration(TimeSpan.FromSeconds(300));
 
         string cacheKeyToWrite = $"product:{productResponse.ProductID}";
-        _logger.LogInformation($"Product name updated: {productResponse.ProductID}, New name: {productResponse.ProductName}");
+        _logger.LogInformation($"ServiceBus: Product  updated: {productResponse.ProductID}, New name: {productResponse.ProductName}");
 
         await _distributedCache.SetStringAsync(cacheKeyToWrite, productJson, options);
     }

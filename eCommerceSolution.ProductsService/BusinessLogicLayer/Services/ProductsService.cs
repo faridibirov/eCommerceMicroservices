@@ -9,6 +9,7 @@ using eCommerce.ProductsService.BusinessLogicLayer.RabbitMQ;
 using eCommerce.ProductsService.BusinessLogicLayer.ServiceBus;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.Extensions.Configuration;
 
 namespace eCommerce.BusinessLogicLayer.Services;
 
@@ -20,9 +21,10 @@ public class ProductsService : IProductsService
     private readonly IProductsRepository _productRepository;
     private readonly IRabbitMQPublisher _rabbitMQPublisher;
     private readonly IServiceBusPublisher _serviceBusPublisher;
+    private readonly IConfiguration _configration;
 
     public ProductsService(IValidator<ProductAddRequest> productAddRequestValidator, IValidator<ProductUpdateRequest> productUpdateRequestValidator,
-         IMapper mapper, IProductsRepository productRepository, IRabbitMQPublisher rabbitMQPublisher, IServiceBusPublisher serviceBusPublisher)
+         IMapper mapper, IProductsRepository productRepository, IRabbitMQPublisher rabbitMQPublisher, IServiceBusPublisher serviceBusPublisher, IConfiguration configration)
     {
         _productAddRequestValidator = productAddRequestValidator;
         _productUpdateRequestValidator = productUpdateRequestValidator;
@@ -30,6 +32,7 @@ public class ProductsService : IProductsService
         _productRepository = productRepository;
         _rabbitMQPublisher = rabbitMQPublisher;
         _serviceBusPublisher = serviceBusPublisher;
+        _configration = configration;
     }
 
     public async Task<ProductResponse?> AddProduct(ProductAddRequest productAddRequest)
@@ -133,7 +136,7 @@ public class ProductsService : IProductsService
         await _rabbitMQPublisher.Publish<Product>(headers, productInput);
 
         ProductResponse updatedProductResponse = _mapper.Map<ProductResponse>(updatedProduct);
-        await _serviceBusPublisher.Publish(headers, updatedProductResponse);
+        await _serviceBusPublisher.Publish(_configration["ServiceBus:ServiceBus_Products_Update_Topic"], headers, updatedProductResponse);
 
         return updatedProductResponse;
     }
@@ -159,6 +162,7 @@ public class ProductsService : IProductsService
             };
             await _rabbitMQPublisher.Initialize();
             await _rabbitMQPublisher.Publish<Product>(headers, existingProduct);
+            await _serviceBusPublisher.Publish(_configration["ServiceBus:ServiceBus_Products_Delete_Topic"], headers, existingProduct);
         }
 
         return result;

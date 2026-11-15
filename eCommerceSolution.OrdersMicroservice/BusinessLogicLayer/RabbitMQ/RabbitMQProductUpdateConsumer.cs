@@ -120,7 +120,7 @@ public class RabbitMQProductUpdateConsumer : IDisposable, IRabbitMQProductUpdate
              .SetAbsoluteExpiration(TimeSpan.FromSeconds(300));
 
         string cacheKeyToWrite = $"product:{productDTO.ProductID}";
-        _logger.LogInformation($"Product name updated: {productDTO.ProductID}, New name: {productDTO.ProductName}");
+        _logger.LogInformation($"RabbitMQ: Product  updated: {productDTO.ProductID}, New name: {productDTO.ProductName}");
 
         await _distributedCache.SetStringAsync(cacheKeyToWrite, productJson, options);
     }

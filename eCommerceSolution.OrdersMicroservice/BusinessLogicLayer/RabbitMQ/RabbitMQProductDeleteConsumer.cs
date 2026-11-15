@@ -103,7 +103,7 @@ public class RabbitMQProductDeleteConsumer : IDisposable, IRabbitMQProductDelete
             {
                 var productDTO = JsonSerializer.Deserialize<ProductDTO>(message);
 
-                _logger.LogInformation($"Product deleted: {productDTO.ProductID}, Product Name: {productDTO.ProductName}");
+                _logger.LogInformation($"RabbitMQ: Product deleted: {productDTO.ProductID}, Product Name: {productDTO.ProductName}");
 
                 await HandleDelete(productDTO.ProductID);
             }

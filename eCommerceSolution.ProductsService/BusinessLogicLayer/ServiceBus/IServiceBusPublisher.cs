@@ -2,5 +2,5 @@
 
 public  interface IServiceBusPublisher
 {
-    Task Publish<T>(Dictionary<string, object> headers, T message);
+    Task Publish<T>(string topicName, Dictionary<string, object> headers, T message);
 }
