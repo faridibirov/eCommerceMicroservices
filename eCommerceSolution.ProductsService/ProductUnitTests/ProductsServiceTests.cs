@@ -22,6 +22,7 @@ public class ProductsServiceTests
     private readonly Mock<IRabbitMQPublisher> _rabbitMQPublisherMock;
     private readonly eCommerce.BusinessLogicLayer.Services.ProductsService _productsService;
     private readonly Mock<IServiceBusPublisher> _serviceBusPublisherMock;
+    private readonly Mock<IConfiguration> _configurationMock;
     private readonly Fixture _fixture;
 
     public ProductsServiceTests()
@@ -32,6 +33,7 @@ public class ProductsServiceTests
         _productUpdateRequestValidatorMock = new Mock<IValidator<ProductUpdateRequest>>();
         _rabbitMQPublisherMock = new Mock<IRabbitMQPublisher>();
         _serviceBusPublisherMock = new Mock<IServiceBusPublisher>();
+        _configurationMock = new Mock<IConfiguration>();
         _fixture = new Fixture();
 
         _productsService = new eCommerce.BusinessLogicLayer.Services.ProductsService(
@@ -40,7 +42,8 @@ public class ProductsServiceTests
             _mapperMock.Object,
             _productsRepositoryMock.Object,
             _rabbitMQPublisherMock.Object,
-            _serviceBusPublisherMock.Object);
+            _serviceBusPublisherMock.Object,
+            _configurationMock.Object);
     }
 
 

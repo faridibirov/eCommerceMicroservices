@@ -38,6 +38,7 @@ public static class DependencyInjection
         services.AddSingleton<IServiceBusProductDeleteConsumer, ServiceBusProductDeleteConsumer>();
         services.AddHostedService<ServiceBusProductUpdateHostedService>();
         services.AddHostedService<ServiceBusProductDeleteHostedService>();
+        services.AddSingleton<IServiceBusPublisher, ServiceBusPublisher>();
 
         return services;
     }

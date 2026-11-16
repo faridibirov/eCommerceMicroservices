@@ -2,7 +2,7 @@
 public record ProductResponse(
     Guid ProductID,
     string ProductName,
-    CategoryOptions Category,
+    string Category,
     double? UnitPrice,
     int? QuantityInStock)
 {

@@ -1,12 +1,7 @@
-﻿using AutoMapper;
-using BusinessLogicLayer.HttpClients;
+﻿using BusinessLogicLayer.HttpClients;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
+using eCommerce.OrdersMicroservice.BusinessLogicLayer.ServiceBus;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.ServiceContracts;
-using eCommerce.OrdersMicroservice.DataAccessLayer.Entities;
-using eCommerce.OrdersMicroservice.DataAccessLayer.RepositoryContracts;
-using FluentValidation;
-using FluentValidation.Results;
-using MongoDB.Driver;
 
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.Services;
 
@@ -20,10 +15,14 @@ public class OrdersService : IOrdersService
     private readonly IOrdersRepository _orderRepository;
     private UsersMicroserviceClient _usersMicroserviceClient;
     private ProductsMicroserviceClient _productsMicroserviceClient;
+    private readonly IServiceBusPublisher _serviceBusPublisher;
+    private readonly IConfiguration _configration;
+
 
     public OrdersService(IValidator<OrderAddRequest> orderAddRequestValidator, IValidator<OrderUpdateRequest> orderUpdateRequestValidator,
         IValidator<OrderItemAddRequest> orderItemAddRequestValidator, IValidator<OrderItemUpdateRequest> orderItemUpdateRequestValidator,
-        IMapper mapper, IOrdersRepository orderRepository, UsersMicroserviceClient usersMicroserviceClient, ProductsMicroserviceClient productsMicroserviceClient)
+        IMapper mapper, IOrdersRepository orderRepository, UsersMicroserviceClient usersMicroserviceClient, ProductsMicroserviceClient productsMicroserviceClient,
+        IServiceBusPublisher serviceBusPublisher, IConfiguration configration)
     {
         _orderAddRequestValidator = orderAddRequestValidator;
         _orderUpdateRequestValidator = orderUpdateRequestValidator;
@@ -33,6 +32,8 @@ public class OrdersService : IOrdersService
         _orderRepository = orderRepository;
         _usersMicroserviceClient = usersMicroserviceClient;
         _productsMicroserviceClient = productsMicroserviceClient;
+        _serviceBusPublisher = serviceBusPublisher;
+        _configration = configration;
     }
 
     public async Task<OrderResponse?> AddOrder(OrderAddRequest orderAddRequest)
@@ -77,7 +78,7 @@ public class OrdersService : IOrdersService
 
         Order orderInput = _mapper.Map<Order>(orderAddRequest);
 
-        foreach(var orderItem in orderInput.OrderItems)
+        foreach (var orderItem in orderInput.OrderItems)
         {
             orderItem.TotalPrice = orderItem.UnitPrice * orderItem.Quantity;
         }
@@ -111,6 +112,14 @@ public class OrdersService : IOrdersService
                 _mapper.Map<ProductDTO, OrderItemResponse>(product, orderItemResponse);
             }
         }
+        var headers = new Dictionary<string, object>()
+                {
+                    {"event", "orders.placed" },
+                    {"RowCount", 1 },
+                    { "OrderItemsCount", addedOrderResponse.OrderItems.Count }
+                };
+
+        await _serviceBusPublisher.Publish(_configration["ServiceBus:ServiceBus_Orders_Placed_Topic"], headers, addedOrderResponse);
 
         return addedOrderResponse;
     }

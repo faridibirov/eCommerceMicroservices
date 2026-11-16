@@ -136,7 +136,7 @@ public class ProductsService : IProductsService
         await _rabbitMQPublisher.Publish<Product>(headers, productInput);
 
         ProductResponse updatedProductResponse = _mapper.Map<ProductResponse>(updatedProduct);
-        await _serviceBusPublisher.Publish(_configration["ServiceBus:ServiceBus_Products_Update_Topic"], headers, updatedProductResponse);
+        await _serviceBusPublisher.Publish(_configration["ServiceBus:ServiceBus_Products_Update_Topic"], headers, productInput);
 
         return updatedProductResponse;
     }

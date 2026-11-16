@@ -25,7 +25,8 @@ public static class DependencyInjection
         //ServiceBus
         services.AddSingleton( _ => new ServiceBusClient(configuration["ServiceBus:ecommerce-servicebus-namespace"]));
         services.AddSingleton<IServiceBusPublisher, ServiceBusPublisher>();
-
+        services.AddSingleton<IServiceBusOrderPlacedConsumer, ServiceBusOrderPlacedConsumer>();
+        services.AddHostedService<ServiceBusOrderPlacedHostedService>();
         return services;
     }
 }
