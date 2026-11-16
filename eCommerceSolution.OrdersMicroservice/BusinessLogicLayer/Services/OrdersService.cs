@@ -1,7 +1,14 @@
-﻿using BusinessLogicLayer.HttpClients;
+﻿using AutoMapper;
+using BusinessLogicLayer.HttpClients;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.ServiceBus;
 using eCommerce.OrdersMicroservice.BusinessLogicLayer.ServiceContracts;
+using eCommerce.OrdersMicroservice.DataAccessLayer.Entities;
+using eCommerce.OrdersMicroservice.DataAccessLayer.RepositoryContracts;
+using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
 
 namespace eCommerce.OrdersMicroservice.BusinessLogicLayer.Services;
 

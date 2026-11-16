@@ -8,6 +8,7 @@ using eCommerce.ProductsService.BusinessLogicLayer.ServiceBus;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Linq.Expressions;
 

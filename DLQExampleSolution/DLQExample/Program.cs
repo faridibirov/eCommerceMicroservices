@@ -1,10 +1,13 @@
-﻿class Program
+﻿using System.Transactions;
+using Azure.Messaging.ServiceBus;
+
+class Program
 {
 
     private const string ServiceBusConnectionString = "Endpoint=sb://farid-ecommerce-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=wfLy4aj8+3v7m8L2xBpp4CoW8gI7YTJDc+ASbB0p2fA=";
 
-    private const string TopicName = "products.updates";
-    private const string SubscriptionName = "products.updates.orders";
+    private const string TopicName = "orders.placed";
+    private const string SubscriptionName = "orders.placed.products";
     private const string DeadLetterQueuePath = $"{TopicName}/subscriptions/{SubscriptionName}/$DeadLetterQueue";
     private const string ForwardTopicName = "orders.placed.reprocess";
 
@@ -23,7 +26,7 @@
 
         processor.ProcessMessageAsync += async (arg) =>
         {
-            Processor_ProcessMessageAsync(client, arg);
+           await Processor_ProcessMessageAsync(client, arg);
         };
         processor.ProcessErrorAsync += Processor_ProcessErrorAsync;
 
@@ -47,7 +50,7 @@
                 Console.WriteLine(body);
 
                 Console.WriteLine("Message Properties:");
-                foreach (var prop in arg.Messages.ApplicationProperties)
+                foreach (var prop in arg.Message.ApplicationProperties)
                 {
                     Console.WriteLine($"Key: {prop.Key}, value: {prop.Value}");
                 }
@@ -63,7 +66,7 @@
                 ServiceBusSender sender = client.CreateSender(ForwardTopicName);
                 ServiceBusMessage forwardedMessage = new ServiceBusMessage(body) { MessageId = arg.Message.MessageId };
 
-                foreach (var prop in arg.Messages.ApplicationProperties)
+                foreach (var prop in arg.Message.ApplicationProperties)
                 {
                     forwardedMessage.ApplicationProperties[prop.Key] = prop.Value;
                 }
@@ -85,7 +88,7 @@
         }
     }
 
-    private static Task Processor_ProcessErrorAsync(ProcessMessageEventArgs arg)
+    private static Task Processor_ProcessErrorAsync(ProcessErrorEventArgs arg)
     {
         Console.WriteLine($"Error:{arg.Exception.Message}");
         Console.WriteLine($"Stack Trace:{arg.Exception.StackTrace}");

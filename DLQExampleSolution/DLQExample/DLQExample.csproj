@@ -5,12 +5,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
-	  <ItemGroup>
-		  <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.2" />
-		  <PackageReference Include="System.Text.Json" Version="9.0.0" />
-	  </ItemGroup>
-	  
   </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.2" />
+		<PackageReference Include="System.Text.Json" Version="9.0.0" />
+	</ItemGroup>
 
 </Project>

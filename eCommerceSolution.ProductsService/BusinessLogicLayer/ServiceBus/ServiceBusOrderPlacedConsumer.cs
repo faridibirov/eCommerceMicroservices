@@ -2,9 +2,9 @@
 using eCommerce.BusinessLogicLayer.DTO;
 using eCommerce.BusinessLogicLayer.ServiceContracts;
 using eCommerce.BusinessLogicLayer.Services;
-using eCommerce.OrdersMicroservice.BusinessLogicLayer.DTO;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
@@ -22,7 +22,7 @@ public class ServiceBusOrderPlacedConsumer : IServiceBusOrderPlacedConsumer
     {
         _logger = logger;
         _configuration = configuration;
-        _serviceBusProcessor = serviceBusClient.CreateProcessor(_configuration["ServiceBus_Orders_Placed_Topic"], _configuration["ServiceBus_Orders_Placed_Products_Subscriptions"],
+        _serviceBusProcessor = serviceBusClient.CreateProcessor(_configuration["ServiceBus:ServiceBus_Orders_Placed_Topic"], _configuration["ServiceBus:ServiceBus_Orders_Placed_Products_Subscriptions"],
             new ServiceBusProcessorOptions()
             { AutoCompleteMessages = false });
         _serviceBusProcessor.ProcessMessageAsync += _serviceBusProcessor_ProcessMessageAsync;
